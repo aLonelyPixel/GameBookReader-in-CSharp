@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace GameBook.Terminal
 {
@@ -6,9 +7,10 @@ namespace GameBook.Terminal
     {
         static void Main(string[] args)
         {            
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("-------Hello and welcome to the best Gamebook application!-------\n");
+            ITerminal myTerminal = new ITerminal();
 
+            myTerminal.Loop();
         }
     }
 }
