@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GameBook.Domain
 {
@@ -19,17 +20,22 @@ namespace GameBook.Domain
 
         public bool ContainsParagraph(int paragraphIndex) => _myBook.ContainsParagraph(paragraphIndex);
 
-        public int GetPreviousParagraph()
+        public int GetPreviousParagraph(int returns)
         {
             if (_gameProgress.Count == 1)
             {
+                Console.WriteLine("je suis ici 1 element");
                 return _gameProgress[^1];
             }
-            if (_gameProgress.Count > 0)
+            if (_gameProgress.Count > 1)
             {
-                return _gameProgress[^2];
+                Console.WriteLine("je suis ici >1 element");
+                return _gameProgress[^returns];
             }
+            Console.WriteLine("je suis ici err");
             return -1;
         }
+
+        
     }
 }

@@ -43,7 +43,7 @@ namespace GameBook.Tests.Domain
             mpModel.AddReadParagraph(3);
             mpModel.AddReadParagraph(4);
 
-            Assert.AreEqual(3, mpModel.GetPreviousParagraph());
+            Assert.AreEqual(1, mpModel.GetPreviousParagraph());
         }
 
         [Test]

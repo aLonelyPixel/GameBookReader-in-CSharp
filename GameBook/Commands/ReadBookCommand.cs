@@ -8,6 +8,7 @@ namespace GameBook.Commands
     public class ReadBookCommand : ICommands
     {
         private readonly MainPresentationModel _mpModel;
+        private int _returnsNb = 1;
 
         public ReadBookCommand(MainPresentationModel mpModel) =>_mpModel = mpModel;
 
@@ -28,33 +29,23 @@ namespace GameBook.Commands
         private void ReadBook()
         {
             var currentParagraphIndex = 1;
-            var chosen = "";
             var hasEnded = false;
-
             while (!hasEnded)
             {
                 var currentParagraph = _mpModel.GetParagraph(currentParagraphIndex);
                 Console.WriteLine("\nParagraphe " + currentParagraph.Index + ":\n" + currentParagraph.Text + "\n");
-                if (chosen != null && chosen.ToLower() != "r")
-                {
-                    _mpModel.AddReadParagraph(currentParagraphIndex);
-                }
-                
+                _mpModel.AddReadParagraph(currentParagraphIndex);
                 var choicesDictionary = InitChoices(currentParagraph);
-
                 Console.Write(currentParagraph.IsTerminal()
                     ? "Le livre est terminé ! Encodez 'q' pour revenir au menu ou 'r' pour revenir au paragraphe précédent : "
                     : "Choisissez une option ou revenez au paragraphe précédent en encodant 'r' : ");
-
-                chosen = Console.ReadLine();
+                var chosen = Console.ReadLine();
 
                 if (Quits(chosen, ref hasEnded)) continue;
                 if (GoesBack(chosen, ref currentParagraphIndex)) continue;
 
                 var optionValue = CheckOption(chosen);
-
                 if (optionValue == 0) continue;
-                
                 if (choicesDictionary.ContainsKey(optionValue))
                 {
                     currentParagraphIndex = choicesDictionary[optionValue].DestParagraph;
@@ -68,24 +59,16 @@ namespace GameBook.Commands
 
         private bool GoesBack(string chosen, ref int currentParagraphIndex)
         {
-            if (chosen != null && chosen.ToLower() == "r")
-            {
-                currentParagraphIndex = GoBack();
-                return true;
-            }
-
-            return false;
+            if (chosen == null || chosen.ToLower() != "r") return false;
+            currentParagraphIndex = GoBack();
+            return true;
         }
 
         private static bool Quits(string chosen, ref bool hasEnded)
         {
-            if (chosen != null && chosen.ToLower() == "q")
-            {
-                hasEnded = true;
-                return true;
-            }
-
-            return false;
+            if (chosen == null || chosen.ToLower() != "q") return false;
+            hasEnded = true;
+            return true;
         }
 
         private static Dictionary<int, Choice> InitChoices(Paragraph currentParagraph)
@@ -107,7 +90,16 @@ namespace GameBook.Commands
         /// paragraph, it sends back to the first paragraph
         /// </summary>
         /// <returns>The index of the previous paragraph</returns>
-        private int GoBack() =>_mpModel.GetPreviousParagraph() == -1 ? 1 : _mpModel.GetPreviousParagraph();
+        private int GoBack()
+        {
+            _returnsNb++;
+            var value = _mpModel.GetPreviousParagraph(_returnsNb);
+            if (value == -1)
+            {
+                return -1;
+            }
+            return value;
+        }
 
         /// <summary>
         /// Converts the entered string in a valid integer
