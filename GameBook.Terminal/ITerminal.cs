@@ -29,7 +29,7 @@ namespace GameBook.Terminal
                     case "2":
                         break;
                     default:
-                        Console.WriteLine("Entre une commande existante idiot :/");
+                        Console.WriteLine("Entrez une commande existante ! :/");
                         break;
                 }
             } while (userChoice != null && !userChoice.Equals("2"));

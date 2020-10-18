@@ -1,4 +1,4 @@
-﻿namespace GameBook
+﻿namespace GameBook.Domain
 {
     public class Choice
     {

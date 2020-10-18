@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using GameBook.Domain;
+﻿using GameBook.Domain;
 using NUnit.Framework;
 
 namespace GameBook.Tests.Domain

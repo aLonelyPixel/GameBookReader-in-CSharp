@@ -1,3 +1,4 @@
+using GameBook.Domain;
 using NUnit.Framework;
 
 namespace GameBook.Tests.Domain

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameBook
+namespace GameBook.Domain
 {
     public class Paragraph
     {

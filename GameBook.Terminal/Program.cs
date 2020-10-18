@@ -1,12 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Input;
-using GameBook.Commands;
+﻿using GameBook.Commands;
 using GameBook.Domain;
 
 namespace GameBook.Terminal
 {
-    class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {

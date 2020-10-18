@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using GameBook.Domain;
 
 namespace GameBook.Commands
@@ -39,15 +40,7 @@ namespace GameBook.Commands
                     _mpModel.AddReadParagraph(currentParagraphIndex);
                 }
                 
-                var choices = currentParagraph.Choices;
-                var choicesDictionary = new Dictionary<int, Choice>();
-                var choiceCounter = 1;
-                foreach (var choice in choices)
-                {
-                    Console.WriteLine(choiceCounter + ".\t" + choice.Text);
-                    choicesDictionary.Add(choiceCounter, choice);
-                    choiceCounter++;
-                }
+                var choicesDictionary = InitChoices(currentParagraph);
 
                 Console.Write(currentParagraph.IsTerminal()
                     ? "Le livre est terminé ! Encodez 'q' pour revenir au menu ou 'r' pour revenir au paragraphe précédent : "
@@ -55,17 +48,8 @@ namespace GameBook.Commands
 
                 chosen = Console.ReadLine();
 
-                if (chosen != null && chosen.ToLower() == "q")
-                {
-                    hasEnded = true;
-                    continue;
-                }
-
-                if (chosen != null && chosen.ToLower() == "r")
-                {
-                    currentParagraphIndex = GoBack();
-                    continue;
-                }
+                if (Quits(chosen, ref hasEnded)) continue;
+                if (GoesBack(chosen, ref currentParagraphIndex)) continue;
 
                 var optionValue = CheckOption(chosen);
 
@@ -78,26 +62,69 @@ namespace GameBook.Commands
                     Console.WriteLine("Le paragraphe n'existe pas ! ");
                     break;
                 }
-                else
-                {
-                    Console.Write("Entrez un choix valide !");
-                }
+                Console.Write("Entrez un choix valide !");
             }
         }
 
+        private bool GoesBack(string chosen, ref int currentParagraphIndex)
+        {
+            if (chosen != null && chosen.ToLower() == "r")
+            {
+                currentParagraphIndex = GoBack();
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool Quits(string chosen, ref bool hasEnded)
+        {
+            if (chosen != null && chosen.ToLower() == "q")
+            {
+                hasEnded = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static Dictionary<int, Choice> InitChoices(Paragraph currentParagraph)
+        {
+            var choices = currentParagraph.Choices;
+            var choicesDictionary = new Dictionary<int, Choice>();
+            var choiceCounter = 1;
+            foreach (var choice in choices)
+            {
+                Console.WriteLine(choiceCounter + ".\t" + choice.Text);
+                choicesDictionary.Add(choiceCounter, choice);
+                choiceCounter++;
+            }
+            return choicesDictionary;
+        }
+
+        /// <summary>
+        /// Returns the previous paragraph if it exists. If requested at the very first
+        /// paragraph, it sends back to the first paragraph
+        /// </summary>
+        /// <returns>The index of the previous paragraph</returns>
         private int GoBack() =>_mpModel.GetPreviousParagraph() == -1 ? 1 : _mpModel.GetPreviousParagraph();
 
-        private static int CheckOption(string chosen)
+        /// <summary>
+        /// Converts the entered string in a valid integer
+        /// </summary>
+        /// <param name="enteredText">The string to be converted</param>
+        /// <returns>The equivalent integer or -1 if the text is null, empty, blank or not an integer</returns>
+        private static int CheckOption(string enteredText) => !IsInteger(enteredText) ? -1 : Convert.ToInt32(enteredText);
+
+        /// <summary>
+        /// Using a regular expression, this method checks if a string matches the pattern of a text
+        /// </summary>
+        /// <param name="enteredText">The string to check</param>
+        /// <returns>True if the string is an integer</returns>
+        private static bool IsInteger(string enteredText)
         {
-            if (chosen.ToLower() == "r")
-            {
-                return 0;
-            }
-            if ((string.IsNullOrEmpty(chosen) || string.IsNullOrWhiteSpace(chosen)))
-            {
-                return -1;
-            }
-            return Convert.ToInt32(chosen);
+            var intPattern = new Regex(@"^\d$");
+            return intPattern.IsMatch(enteredText);
         }
     }
 }
