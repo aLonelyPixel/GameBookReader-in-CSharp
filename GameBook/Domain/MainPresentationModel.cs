@@ -20,19 +20,16 @@ namespace GameBook.Domain
 
         public bool ContainsParagraph(int paragraphIndex) => _myBook.ContainsParagraph(paragraphIndex);
 
-        public int GetPreviousParagraph(int returns)
+        public int GetPreviousParagraph(int amountOfReturns)
         {
             if (_gameProgress.Count == 1)
             {
-                Console.WriteLine("je suis ici 1 element");
                 return _gameProgress[^1];
             }
             if (_gameProgress.Count > 1)
             {
-                Console.WriteLine("je suis ici >1 element");
-                return _gameProgress[^returns];
+                return _gameProgress[^amountOfReturns];
             }
-            Console.WriteLine("je suis ici err");
             return -1;
         }
 

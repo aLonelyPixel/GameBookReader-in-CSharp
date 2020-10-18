@@ -9,6 +9,7 @@ namespace GameBook.Commands
     {
         private readonly MainPresentationModel _mpModel;
         private int _returnsNb = 1;
+        private int _currentParagraphIndex = 1;
 
         public ReadBookCommand(MainPresentationModel mpModel) =>_mpModel = mpModel;
 
@@ -28,28 +29,36 @@ namespace GameBook.Commands
 
         private void ReadBook()
         {
-            var currentParagraphIndex = 1;
             var hasEnded = false;
+            var chosen = "";
             while (!hasEnded)
             {
-                var currentParagraph = _mpModel.GetParagraph(currentParagraphIndex);
+                if (_currentParagraphIndex == 1)
+                {
+                    _returnsNb = 1;
+                }
+                var currentParagraph = _mpModel.GetParagraph(_currentParagraphIndex);
                 Console.WriteLine("\nParagraphe " + currentParagraph.Index + ":\n" + currentParagraph.Text + "\n");
-                _mpModel.AddReadParagraph(currentParagraphIndex);
+                if (chosen != null && chosen.ToLower() != "r" && _currentParagraphIndex >= 1)
+                {
+                    _mpModel.AddReadParagraph(_currentParagraphIndex);
+                }
+                
                 var choicesDictionary = InitChoices(currentParagraph);
                 Console.Write(currentParagraph.IsTerminal()
                     ? "Le livre est terminé ! Encodez 'q' pour revenir au menu ou 'r' pour revenir au paragraphe précédent : "
                     : "Choisissez une option ou revenez au paragraphe précédent en encodant 'r' : ");
-                var chosen = Console.ReadLine();
+                chosen = Console.ReadLine();
 
                 if (Quits(chosen, ref hasEnded)) continue;
-                if (GoesBack(chosen, ref currentParagraphIndex)) continue;
+                if (GoesBack(chosen, ref _currentParagraphIndex)) continue;
 
                 var optionValue = CheckOption(chosen);
                 if (optionValue == 0) continue;
                 if (choicesDictionary.ContainsKey(optionValue))
                 {
-                    currentParagraphIndex = choicesDictionary[optionValue].DestParagraph;
-                    if (_mpModel.ContainsParagraph(currentParagraphIndex)) continue;
+                    _currentParagraphIndex = choicesDictionary[optionValue].DestParagraph;
+                    if (_mpModel.ContainsParagraph(_currentParagraphIndex)) continue;
                     Console.WriteLine("Le paragraphe n'existe pas ! ");
                     break;
                 }
@@ -93,10 +102,14 @@ namespace GameBook.Commands
         private int GoBack()
         {
             _returnsNb++;
+            if (_currentParagraphIndex == 1)
+            {
+                return 1;
+            }
             var value = _mpModel.GetPreviousParagraph(_returnsNb);
             if (value == -1)
             {
-                return -1;
+                return 1;
             }
             return value;
         }
