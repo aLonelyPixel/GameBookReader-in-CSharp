@@ -1,31 +1,39 @@
 ﻿using System;
+using GameBook.Commands;
 
 namespace GameBook.Terminal
 {
-    public class ITerminal
+    public class Terminal
     {
+        private readonly ExitCommand _exitCommand;
+        private readonly ReadBookCommand _readBookCommand;
+
+        public Terminal(ExitCommand exitCommand, ReadBookCommand readBookCommand)
+        {
+            _exitCommand = exitCommand;
+            _readBookCommand = readBookCommand;
+        }
+
         public void Loop()
         {
-            var userChoice = string.Empty;
-
+            string userChoice;
             do
             {
-                Console.WriteLine("\nWould you like to start [read]ing or [exit]?");
+                Console.WriteLine("\nMENU\n\n[1] Lire le livre\n[2] Quitter");
                 userChoice = Console.ReadLine();
                 switch (userChoice?.ToLower() ?? string.Empty)
                 {
-                    case "exit":
-                        Environment.Exit(0);
+                    case "1":
+                        _readBookCommand.Execute();
                         break;
-                    case "read":
-                        //throw new NotImplementedException();
-                        Console.WriteLine("[NOT IMPLEMENTED]");
+                    case "2":
                         break;
                     default:
-                        Console.WriteLine("Please enter a valid command you muppet");
+                        Console.WriteLine("Entre une commande existante idiot :/");
                         break;
                 }
-            } while (!userChoice.ToLower().Equals("exit"));
+            } while (userChoice != null && !userChoice.Equals("2"));
+            _exitCommand.Execute();
         }
     }
 }

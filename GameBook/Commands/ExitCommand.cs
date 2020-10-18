@@ -6,6 +6,7 @@ namespace GameBook.Commands
     {
         public void Execute()
         {
+            Console.WriteLine("Au revoir ! ");
             Environment.Exit(0);
         }
     }
