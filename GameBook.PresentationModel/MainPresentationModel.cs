@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GameBook.Domain;
 
-namespace GameBook.Domain
+namespace GameBook.PresentationModel
 {
-    public class MainPresentationModel
+/*    public class MainPresentationModel
     {
         private readonly Book _myBook;
-        private readonly List<int> _gameProgress = new List<int>();
+        private readonly IList<int> _gameProgress = new List<int>();
 
         public MainPresentationModel(Book myBook) => _myBook = myBook;
 
@@ -18,21 +18,13 @@ namespace GameBook.Domain
 
         public void ClearHistory() => _gameProgress.Clear();
 
-        public bool ContainsParagraph(int paragraphIndex) => _myBook.ContainsParagraph(paragraphIndex);
+        private bool ContainsParagraph(int paragraphIndex) => _myBook.ContainsParagraph(paragraphIndex);
 
         public int GetPreviousParagraph(int amountOfReturns)
         {
-            if (_gameProgress.Count == 1)
-            {
-                return _gameProgress[^1];
-            }
-            if (_gameProgress.Count > 1)
-            {
-                return _gameProgress[^amountOfReturns];
-            }
+            if (_gameProgress.Count == 1) return _gameProgress[^1];
+            if (_gameProgress.Count > 1) return _gameProgress[^amountOfReturns];
             return -1;
         }
-
-        
-    }
+    }*/
 }

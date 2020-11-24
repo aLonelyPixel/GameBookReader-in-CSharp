@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBook", "GameBook\GameBook.csproj", "{E6DEF860-999E-4BEF-B958-9978CAAEF722}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook", "GameBook\GameBook.csproj", "{E6DEF860-999E-4BEF-B958-9978CAAEF722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBook.Terminal", "GameBook.Terminal\GameBook.Terminal.csproj", "{30D37C45-10C5-45BA-8484-7A1A6234D700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Terminal", "GameBook.Terminal\GameBook.Terminal.csproj", "{30D37C45-10C5-45BA-8484-7A1A6234D700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBook.Tests", "GameBook.Tests\GameBook.Tests.csproj", "{05CBF619-5629-409F-8A9F-1146A61F159A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Tests", "GameBook.Tests\GameBook.Tests.csproj", "{05CBF619-5629-409F-8A9F-1146A61F159A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Wpf", "GameBook.Wpf\GameBook.Wpf.csproj", "{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.MainPresentationModel", "GameBook.MainPresentationModel\GameBook.MainPresentationModel.csproj", "{E9347A89-E65B-4693-808D-A52A5555885E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9347A89-E65B-4693-808D-A52A5555885E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9347A89-E65B-4693-808D-A52A5555885E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9347A89-E65B-4693-808D-A52A5555885E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9347A89-E65B-4693-808D-A52A5555885E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

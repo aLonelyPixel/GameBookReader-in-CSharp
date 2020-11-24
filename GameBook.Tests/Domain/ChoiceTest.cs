@@ -1,4 +1,5 @@
 using GameBook.Domain;
+using Moq;
 using NUnit.Framework;
 
 namespace GameBook.Tests.Domain
@@ -8,7 +9,7 @@ namespace GameBook.Tests.Domain
         [Test]
         public void KnowsItsText()
         {
-            Choice testChoice = new Choice("choice1", 2);
+            var testChoice = new Choice("choice1", 2);
 
             Assert.AreEqual("choice1", testChoice.Text);
         }
@@ -16,7 +17,7 @@ namespace GameBook.Tests.Domain
         [Test]
         public void KnowsItsDestParagraph()
         {
-            Choice testChoice = new Choice("choice1", 2);
+            var testChoice = new Choice("choice1", 2);
 
             Assert.AreEqual(2, testChoice.DestParagraph);
         }

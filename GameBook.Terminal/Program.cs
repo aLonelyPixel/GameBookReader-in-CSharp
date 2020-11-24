@@ -3,12 +3,12 @@ using GameBook.Domain;
 
 namespace GameBook.Terminal
 {
-    internal class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
             var myBook = CreateBook();
-            var mpModel = new MainPresentationModel(myBook);
+            var mpModel = new MainPresentationModelOLD(myBook);
             var exitCommand = new ExitCommand();
             var readBookCommand = new ReadBookCommand(mpModel);
             var myTerminal = new Terminal(exitCommand, readBookCommand);

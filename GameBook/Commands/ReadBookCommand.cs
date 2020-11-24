@@ -7,11 +7,11 @@ namespace GameBook.Commands
 {
     public class ReadBookCommand : ICommands
     {
-        private readonly MainPresentationModel _mpModel;
+        private readonly MainPresentationModelOLD _mpModel;
         private int _returnsNb = 1;
         private int _currentParagraphIndex = 1;
 
-        public ReadBookCommand(MainPresentationModel mpModel) =>_mpModel = mpModel;
+        public ReadBookCommand(MainPresentationModelOLD mpModel) =>_mpModel = mpModel;
 
         public void Execute()
         {
