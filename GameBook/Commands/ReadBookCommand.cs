@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GameBook.Domain;
+using GameBook.Model;
 
 namespace GameBook.Commands
 {

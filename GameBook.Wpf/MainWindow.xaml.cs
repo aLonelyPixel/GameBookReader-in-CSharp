@@ -11,14 +11,13 @@ namespace GameBook.Wpf
     /// </summary>
     public partial class MainWindow
     {
-        private readonly MainPresentationModel.MainPresentationModel _mpModel;
+        private readonly ViewModel.ViewModel _mpModel;
         public MainWindow()
         {
             InitializeComponent();
-            _mpModel = new MainPresentationModel.MainPresentationModel(new ReadingSession(CreateBook()));
-            BookTitle.Content = _mpModel.GetBookTitle();
-            CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
-            ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
+            _mpModel = new ViewModel.ViewModel(new ReadingSession(CreateBook()));
+            //CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
+            //ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
             VisitedParagraphs.SelectionChanged += GoToVisitedParagraph;
             GoBack.Click += GoBackToPrevious;
             RefreshParagraphs();
@@ -35,7 +34,7 @@ namespace GameBook.Wpf
         private void RefreshParagraphs()
         {
             Choices.Children.Clear();
-            foreach (var choiceText in _mpModel.GetParagraphChoices(_mpModel.GetCurrentParagraph()))
+            /*foreach (var choiceText in _mpModel.GetParagraphChoices(_mpModel.GetCurrentParagraph()))
             {
                 var choiceButton = new Button
                 {
@@ -43,7 +42,7 @@ namespace GameBook.Wpf
                 };
                 choiceButton.Click += GoToParagraph;
                 Choices.Children.Add(choiceButton);
-            }
+            }*/
         }
 
         private void GoToParagraph(object sender, RoutedEventArgs e)
@@ -80,8 +79,8 @@ namespace GameBook.Wpf
 
         private void Refresh()
         {
-            CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
-            ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
+            //CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
+            //ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
             Warning.Background = new SolidColorBrush(Colors.Orange);
             RefreshParagraphs();
             UpdateComboBox();

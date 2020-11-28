@@ -2,20 +2,20 @@
 
 namespace GameBook.Domain
 {
-    public class ReadingSession
+    public class ReadingSession : IReadingSession
     {
-        private readonly Book _myBook;
+        private readonly IBook _myBook;
         private int _currentParagraph;
         private readonly IList<int> _visitedParagraphs = new List<int>();
 
-        public ReadingSession(Book book)
+        public ReadingSession(IBook book)
         { 
             _myBook = book;
             _currentParagraph = 1; 
             _visitedParagraphs.Add(_currentParagraph);
         }
 
-        public string GetBookTitle() => _myBook.Name;
+        public virtual string GetBookTitle() => _myBook.Name;
 
         public int GetCurrentParagraph() => _currentParagraph;
 
@@ -55,6 +55,8 @@ namespace GameBook.Domain
             _currentParagraph = _myBook.GetParagraphIndex(paragraphText);
             AdjustVisitedParagraphs(_currentParagraph);
         }
+
+        public string GetParagraphContent() => _myBook.GetParagraphText(_currentParagraph); 
 
         private void AdjustVisitedParagraphs(int currentParagraph)
         {

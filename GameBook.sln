@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Tests", "GameBook.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Wpf", "GameBook.Wpf\GameBook.Wpf.csproj", "{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.MainPresentationModel", "GameBook.MainPresentationModel\GameBook.MainPresentationModel.csproj", "{E9347A89-E65B-4693-808D-A52A5555885E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.ViewModel", "GameBook.MainPresentationModel\GameBook.ViewModel.csproj", "{E9347A89-E65B-4693-808D-A52A5555885E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

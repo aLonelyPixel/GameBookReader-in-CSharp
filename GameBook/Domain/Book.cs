@@ -2,7 +2,7 @@
 
 namespace GameBook.Domain
 {
-    public class Book
+    public class Book : IBook
     {
         public Book(string bookName, params Paragraph[] newParagraphs)
         {
@@ -20,14 +20,14 @@ namespace GameBook.Domain
         
         public Paragraph GetParagraph(int paragraphIndex) => Paragraphs[paragraphIndex];
 
-        public virtual string GetParagraphText(in int paragraphIndex) => Paragraphs[paragraphIndex].Text;
+        public string GetParagraphText(int paragraphIndex) => Paragraphs[paragraphIndex].Text;
 
-        public virtual IEnumerable<string> GetParagraphChoices(int paragraphIndex) => Paragraphs[paragraphIndex].GetChoices();
+        public IEnumerable<string> GetParagraphChoices(int paragraphIndex) => Paragraphs[paragraphIndex].GetChoices();
 
         public int GetChoiceDestination(int currentParagraph, int choiceIndex) =>
             Paragraphs[currentParagraph].GetChoiceDestination(choiceIndex);
 
-        public virtual bool ParagraphIsFinal(int currentParagraph) => Paragraphs[currentParagraph].IsTerminal();
+        public bool ParagraphIsFinal(int currentParagraph) => Paragraphs[currentParagraph].IsTerminal();
 
         public IEnumerable<string> GetParagraphsLabels(IEnumerable<int> visitedParagraphs)
         {

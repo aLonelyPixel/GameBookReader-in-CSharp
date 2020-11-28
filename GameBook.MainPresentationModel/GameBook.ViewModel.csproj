@@ -8,4 +8,8 @@
     <ProjectReference Include="..\GameBook\GameBook.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
+
 </Project>

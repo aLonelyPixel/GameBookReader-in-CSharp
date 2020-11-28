@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
+using GameBook.Domain;
 
-namespace GameBook.Domain
+namespace GameBook.Model
 {
     public class MainPresentationModelOLD
     {
         private readonly Book _myBook;
         private readonly IList<int> _gameProgress = new List<int>();
-        private ReadingSession readingSession;
 
         public MainPresentationModelOLD(Book myBook) => _myBook = myBook;
-
-        public MainPresentationModelOLD(ReadingSession readingSession)
-        {
-            this.readingSession = new ReadingSession(this._myBook);
-        }
 
         public string GetBookTitle() => _myBook.Name;
 

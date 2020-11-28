@@ -1,5 +1,6 @@
 ﻿using GameBook.Commands;
 using GameBook.Domain;
+using GameBook.Model;
 
 namespace GameBook.Terminal
 {
