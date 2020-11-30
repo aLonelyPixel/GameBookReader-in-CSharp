@@ -27,7 +27,7 @@ namespace GameBook.Wpf
         {
             if (VisitedParagraphs.Items.Count <= 0) return;
             _mpModel.GoToVisitedParagraph(VisitedParagraphs.SelectedItem.ToString());
-            Warning.Visibility = Visibility.Hidden;
+            //Warning.Visibility = Visibility.Hidden;
             Refresh();
         }
 
@@ -47,7 +47,7 @@ namespace GameBook.Wpf
 
         private void GoToParagraph(object sender, RoutedEventArgs e)
         {
-            Warning.Visibility = Visibility.Visible;
+            //Warning.Visibility = Visibility.Visible;
             //Warning.Content = _mpModel.GoToParagraphByChoice(Choices.Children.IndexOf((UIElement) sender));
             Refresh();
         }
@@ -55,9 +55,9 @@ namespace GameBook.Wpf
         private void CheckEndOfStory()
         {
             if (!_mpModel.StoryEnded()) return;
-            Warning.Visibility = Visibility.Visible;
-            Warning.Content += ". Vous avez atteint la fin du livre.";
-            Warning.Background = new SolidColorBrush(Colors.Green);
+            //Warning.Visibility = Visibility.Visible;
+            //Warning.Content += ". Vous avez atteint la fin du livre.";
+            //Warning.Background = new SolidColorBrush(Colors.Green);
         }
 
         private void UpdateComboBox()
@@ -74,14 +74,14 @@ namespace GameBook.Wpf
         {
             _mpModel.GoBackToPrevious();
             Refresh();
-            Warning.Visibility = Visibility.Hidden;
+            //Warning.Visibility = Visibility.Hidden;
         }
 
         private void Refresh()
         {
             //CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
             //ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
-            Warning.Background = new SolidColorBrush(Colors.Orange);
+            //Warning.Background = new SolidColorBrush(Colors.Orange);
             RefreshParagraphs();
             UpdateComboBox();
             CheckEndOfStory();

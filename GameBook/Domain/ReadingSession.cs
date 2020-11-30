@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GameBook.Domain
 {
@@ -8,7 +7,8 @@ namespace GameBook.Domain
         private readonly IBook _myBook;
         private int _currentParagraph;
         private readonly IList<int> _visitedParagraphs = new List<int>();
-        private IEnumerable<string> _choices;
+        private IDictionary<string, int> _choices;
+        public string WarningMessage { get; set; }
 
         public ReadingSession(IBook book)
         { 
@@ -16,6 +16,7 @@ namespace GameBook.Domain
             _currentParagraph = 1; 
             _visitedParagraphs.Add(_currentParagraph);
             _choices = book.GetParagraphChoices(_currentParagraph);
+            WarningMessage = "No message";
         }
 
         public virtual string GetBookTitle() => _myBook.Name;
@@ -24,18 +25,22 @@ namespace GameBook.Domain
 
         public string GetParagraphText(int paragraphIndex) => _myBook.GetParagraphText(paragraphIndex);
 
-        public IEnumerable<string> GetParagraphChoices(int paragraphIndex) => _choices = _myBook.GetParagraphChoices(paragraphIndex);
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => _choices = _myBook.GetParagraphChoices(paragraphIndex);
 
-        public string GoToParagraphByChoice(int choiceIndex)
+        public void GoToParagraphByChoice(int destinationParagraph)
         {
-            _currentParagraph = _myBook.GetChoiceDestination(_currentParagraph, choiceIndex);
+            _currentParagraph = destinationParagraph;
             if (_visitedParagraphs.Contains(_currentParagraph))
             {
                 _visitedParagraphs.Add(_currentParagraph);
-                return $"Vous avez déjà lu le paragraphe {_currentParagraph}. Vous êtes ensuite allé au paragraphe {_visitedParagraphs[_visitedParagraphs.IndexOf(_currentParagraph) + 1]}";
+                WarningMessage = $"Vous avez déjà lu le paragraphe {_currentParagraph}. Vous êtes ensuite allé au paragraphe {_visitedParagraphs[_visitedParagraphs.IndexOf(_currentParagraph) + 1]}";
             }
             _visitedParagraphs.Add(_currentParagraph);
-            return $"Vous quittez le paragraphe {_visitedParagraphs[^2]} pour aller au paragraphe {_visitedParagraphs[^1]}";
+            WarningMessage = $"Vous quittez le paragraphe {_visitedParagraphs[^2]} pour aller au paragraphe {_visitedParagraphs[^1]}";
+            if (HasStoryEnded())
+            {
+                WarningMessage += ". Vous avez atteint la fin du livre.";
+            }
         }
 
         public IEnumerable<string> GetVisitedParagraphs()
@@ -51,6 +56,7 @@ namespace GameBook.Domain
             if (_visitedParagraphs.Count < 2) return;
             _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
             _currentParagraph = _visitedParagraphs[^1];
+            WarningMessage = "No message";
         }
 
         public void GoToVisitedParagraph(string paragraphText)
@@ -70,14 +76,5 @@ namespace GameBook.Domain
             }
         }
 
-        public IEnumerator<string> GetEnumerator()
-        {
-            return _choices.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }

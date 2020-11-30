@@ -2,13 +2,14 @@
 
 namespace GameBook.Domain
 {
-    public interface IReadingSession : IEnumerable<string>
+    public interface IReadingSession
     {
+        public string WarningMessage { get; set; }
         public string GetBookTitle();
         public int GetCurrentParagraph();
         public string GetParagraphText(int paragraphIndex);
-        public IEnumerable<string> GetParagraphChoices(int paragraphIndex);
-        public string GoToParagraphByChoice(int choiceIndex);
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex);
+        public void GoToParagraphByChoice(int choiceIndex);
         public bool HasStoryEnded();
         public IEnumerable<string> GetVisitedParagraphs();
         public void GoBackToPrevious();

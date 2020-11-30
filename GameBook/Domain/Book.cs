@@ -22,7 +22,10 @@ namespace GameBook.Domain
 
         public string GetParagraphText(int paragraphIndex) => Paragraphs[paragraphIndex].Text;
 
-        public IEnumerable<string> GetParagraphChoices(int paragraphIndex) => Paragraphs[paragraphIndex].GetChoices();
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex)
+        {
+            return Paragraphs[paragraphIndex].GetChoices();
+        }
 
         public int GetChoiceDestination(int currentParagraph, int choiceIndex) =>
             Paragraphs[currentParagraph].GetChoiceDestination(choiceIndex);
