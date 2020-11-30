@@ -5,6 +5,6 @@
              xmlns:viewModel="clr-namespace:GameBook.ViewModel;assembly=GameBook.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <viewModel:ViewModelLocator x:Key="Locator" />
+        <viewModel:GameBookViewModelLocator x:Key="Locator" />
     </Application.Resources>
 </Application>

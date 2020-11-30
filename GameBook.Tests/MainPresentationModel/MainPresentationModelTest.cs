@@ -12,7 +12,7 @@ namespace GameBook.Tests.MainPresentationModel
         {
             Mock<Book> bookMock = new Mock<Book>("fake title");
             Mock<ReadingSession> readingMock = new Mock<ReadingSession>(bookMock.Object);
-            ViewModel.ViewModel mpModel = new ViewModel.ViewModel(readingMock.Object);
+            ViewModel.GameBookViewModel mpModel = new ViewModel.GameBookViewModel(readingMock.Object);
             //mpModel.GetBookTitle();
 
             readingMock.Verify(readingSession => readingSession.GetBookTitle(), Times.Once);

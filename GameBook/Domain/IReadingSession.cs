@@ -2,7 +2,7 @@
 
 namespace GameBook.Domain
 {
-    public interface IReadingSession
+    public interface IReadingSession : IEnumerable<string>
     {
         public string GetBookTitle();
         public int GetCurrentParagraph();

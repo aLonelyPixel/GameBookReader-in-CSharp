@@ -2,9 +2,11 @@
 
 namespace GameBook.ViewModel
 {
-    public class ViewModelLocator
+    public class GameBookViewModelLocator
     {
-        public ViewModel ViewModel { get; } = new ViewModel(new ReadingSession(CreateBook()));
+        private readonly GameBookViewModel _gameBookViewModel = new GameBookViewModel(new ReadingSession(CreateBook()));
+
+        public GameBookViewModel GameBookViewModel => _gameBookViewModel;
 
         private static Book CreateBook()
         {

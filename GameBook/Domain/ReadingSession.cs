@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace GameBook.Domain
 {
@@ -7,12 +8,14 @@ namespace GameBook.Domain
         private readonly IBook _myBook;
         private int _currentParagraph;
         private readonly IList<int> _visitedParagraphs = new List<int>();
+        private IEnumerable<string> _choices;
 
         public ReadingSession(IBook book)
         { 
             _myBook = book;
             _currentParagraph = 1; 
             _visitedParagraphs.Add(_currentParagraph);
+            _choices = book.GetParagraphChoices(_currentParagraph);
         }
 
         public virtual string GetBookTitle() => _myBook.Name;
@@ -21,7 +24,7 @@ namespace GameBook.Domain
 
         public string GetParagraphText(int paragraphIndex) => _myBook.GetParagraphText(paragraphIndex);
 
-        public IEnumerable<string> GetParagraphChoices(int paragraphIndex) => _myBook.GetParagraphChoices(paragraphIndex);
+        public IEnumerable<string> GetParagraphChoices(int paragraphIndex) => _choices = _myBook.GetParagraphChoices(paragraphIndex);
 
         public string GoToParagraphByChoice(int choiceIndex)
         {
@@ -65,6 +68,16 @@ namespace GameBook.Domain
                 if (_visitedParagraphs[i].Equals(currentParagraph)) return;
                 _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
             }
+        }
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return _choices.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

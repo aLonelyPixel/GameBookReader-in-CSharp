@@ -1,18 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using GameBook.Domain;
 using GameBook.ViewModel.Annotations;
 
 namespace GameBook.ViewModel
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class GameBookViewModel : INotifyPropertyChanged
     {
         private readonly IReadingSession _readingSession;
 
-        public ViewModel(IReadingSession readingSession)
+        public ObservableCollection<ChoiceViewModel> Choices { get; }
+
+        public GameBookViewModel(IReadingSession readingSession)
         {
             _readingSession = readingSession;
+            //_readingSession.GetParagraphChoices(readingSession.GetCurrentParagraph());
+            Choices = new ObservableCollection<ChoiceViewModel>(_readingSession.Select(choice => new ChoiceViewModel(choice)));
         }
 
         //public string GetBookTitle() => _readingSession.GetBookTitle();
@@ -46,6 +52,15 @@ namespace GameBook.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class ChoiceViewModel
+    {
+        public string ChoiceText { get; }
+        public ChoiceViewModel(string choice)
+        {
+            ChoiceText = choice;
         }
     }
 }

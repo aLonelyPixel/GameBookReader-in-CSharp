@@ -11,11 +11,11 @@ namespace GameBook.Wpf
     /// </summary>
     public partial class MainWindow
     {
-        private readonly ViewModel.ViewModel _mpModel;
+        private readonly ViewModel.GameBookViewModel _mpModel;
         public MainWindow()
         {
             InitializeComponent();
-            _mpModel = new ViewModel.ViewModel(new ReadingSession(CreateBook()));
+            _mpModel = new ViewModel.GameBookViewModel(new ReadingSession(CreateBook()));
             //CurrentParagraph.Content = $"Paragraph {_mpModel.GetCurrentParagraph()}";
             //ParagraphContent.Text = _mpModel.GetParagraphText(_mpModel.GetCurrentParagraph());
             VisitedParagraphs.SelectionChanged += GoToVisitedParagraph;
@@ -33,7 +33,7 @@ namespace GameBook.Wpf
 
         private void RefreshParagraphs()
         {
-            Choices.Children.Clear();
+            //Choices.Children.Clear();
             /*foreach (var choiceText in _mpModel.GetParagraphChoices(_mpModel.GetCurrentParagraph()))
             {
                 var choiceButton = new Button
@@ -48,7 +48,7 @@ namespace GameBook.Wpf
         private void GoToParagraph(object sender, RoutedEventArgs e)
         {
             Warning.Visibility = Visibility.Visible;
-            Warning.Content = _mpModel.GoToParagraphByChoice(Choices.Children.IndexOf((UIElement) sender));
+            //Warning.Content = _mpModel.GoToParagraphByChoice(Choices.Children.IndexOf((UIElement) sender));
             Refresh();
         }
 
