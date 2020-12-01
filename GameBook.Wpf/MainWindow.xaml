@@ -7,6 +7,7 @@
         Title="MainWindow" Height="450" Width="800" 
         DataContext="{Binding Source={StaticResource Locator}, Path=GameBookViewModel}">
     <StackPanel Orientation="Vertical" Background="DarkCyan">
+        <Button Content="Open..." Width="100" HorizontalAlignment="Right" Margin="0 5 10 0"></Button>
         <TextBlock Text="{Binding Path=BookTitle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="21"  
                    FontWeight="Bold" Margin="20, 10, 0 0"/>
         <TextBlock Text="{Binding Path=CurrentParagraph}" FontStyle="Italic" Foreground="FloralWhite" 
