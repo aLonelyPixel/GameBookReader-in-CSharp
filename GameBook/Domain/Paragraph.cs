@@ -27,17 +27,6 @@ namespace GameBook.Domain
             return choiceIndex >= 0 && choiceIndex < Choices.Count ? Choices[choiceIndex].DestParagraph : -1;
         }
 
-        /*        public virtual IList<string> GetChoices()
-                {
-                    IList<string> choicesLabels = new List<string>();
-                    foreach (var choice in Choices)
-                    {
-                        choicesLabels.Add($"{choice.Text},{choice.DestParagraph}");
-                    }
-
-                    return choicesLabels;
-                }*/
-
         public virtual IDictionary<string, int> GetChoices()
         {
             IDictionary<string, int> choicesDictionary = new Dictionary<string, int>();

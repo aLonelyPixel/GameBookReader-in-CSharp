@@ -4,8 +4,8 @@
     {
         public Choice(string text, int destParagraph)
         {
-            this.Text = text;
-            this.DestParagraph = destParagraph;
+            Text = text;
+            DestParagraph = destParagraph;
         }
         public string Text { get; }
 

@@ -6,75 +6,106 @@ namespace GameBook.Domain
     {
         private readonly IBook _myBook;
         private int _currentParagraph;
-        private readonly IList<int> _visitedParagraphs = new List<int>();
-        private IDictionary<string, int> _choices;
-        public string WarningMessage { get; set; }
+        private readonly IList<int> _visitedParagraphs;
+        private readonly IDictionary<int, string> _readingHistory;
+        public string WarningMessage { get; set;}
 
         public ReadingSession(IBook book)
         { 
             _myBook = book;
-            _currentParagraph = 1; 
-            _visitedParagraphs.Add(_currentParagraph);
-            _choices = book.GetParagraphChoices(_currentParagraph);
+            _currentParagraph = 1;
+            _visitedParagraphs = new List<int> {_currentParagraph};
+            _readingHistory = new SortedDictionary<int, string>();
             WarningMessage = "No message";
         }
 
-        public virtual string GetBookTitle() => _myBook.Name;
+        public string GetBookTitle() => _myBook.Name;
 
         public int GetCurrentParagraph() => _currentParagraph;
 
-        public string GetParagraphText(int paragraphIndex) => _myBook.GetParagraphText(paragraphIndex);
+        public string GetParagraphContent() => _myBook.GetParagraphText(_currentParagraph);
 
-        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => _choices = _myBook.GetParagraphChoices(paragraphIndex);
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => _myBook.GetParagraphChoices(paragraphIndex);
 
         public void GoToParagraphByChoice(int destinationParagraph)
         {
+            UpdateMessage(destinationParagraph, -1);
             _currentParagraph = destinationParagraph;
-            if (_visitedParagraphs.Contains(_currentParagraph))
-            {
-                _visitedParagraphs.Add(_currentParagraph);
-                WarningMessage = $"Vous avez déjà lu le paragraphe {_currentParagraph}. Vous êtes ensuite allé au paragraphe {_visitedParagraphs[_visitedParagraphs.IndexOf(_currentParagraph) + 1]}";
-            }
             _visitedParagraphs.Add(_currentParagraph);
-            WarningMessage = $"Vous quittez le paragraphe {_visitedParagraphs[^2]} pour aller au paragraphe {_visitedParagraphs[^1]}";
-            if (HasStoryEnded())
+            
+            if (_myBook.ParagraphIsFinal(_currentParagraph)) WarningMessage += ". Vous avez atteint la fin du livre.";
+            UpdateHistory();
+        }
+
+        public IDictionary<int, string> GetHistory() => _readingHistory;
+
+        private void UpdateHistory()
+        {
+            foreach (var visitedParagraph in _visitedParagraphs)
             {
-                WarningMessage += ". Vous avez atteint la fin du livre.";
+                if (!_readingHistory.ContainsKey(visitedParagraph))
+                {
+                    _readingHistory.Add(visitedParagraph, _myBook.GetParagraphLabel(visitedParagraph));
+                }
             }
         }
 
-        public IEnumerable<string> GetVisitedParagraphs()
+        private void UpdateMessage(int destination, int previouslyChosen)
         {
-            IList<string> visitedParagraphs = new List<string>(_myBook.GetParagraphsLabels(_visitedParagraphs));
-            return visitedParagraphs;
+            if (_visitedParagraphs.Contains(destination))
+            {
+                if (_visitedParagraphs[^1] == destination)
+                {
+                    if (previouslyChosen > 0)
+                    {
+                        WarningMessage = $"Vous avez déjà lu le paragraphe {destination}. Vous êtes ensuite allé au paragraphe {previouslyChosen}";
+                    }
+                }
+                else
+                {
+                    WarningMessage = $"Vous avez déjà lu le paragraphe {destination}. Vous êtes ensuite allé au paragraphe {_visitedParagraphs[_visitedParagraphs.IndexOf(destination) + 1]}";
+                }
+            }
+            else
+            {
+                WarningMessage = $"Vous quittez le paragraphe {_currentParagraph} pour aller au paragraphe {destination}";
+            }
         }
-
-        public bool HasStoryEnded() => _myBook.ParagraphIsFinal(_currentParagraph);
 
         public void GoBackToPrevious()
         {
             if (_visitedParagraphs.Count < 2) return;
+            if (_readingHistory.ContainsKey(_visitedParagraphs[^1]))
+            {
+                _readingHistory.Remove(_visitedParagraphs[^1]);
+            }
+
+            var previouslyChosen = _visitedParagraphs[^1];
             _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
+            UpdateMessage(_visitedParagraphs[^1], previouslyChosen);
             _currentParagraph = _visitedParagraphs[^1];
-            WarningMessage = "No message";
         }
 
-        public void GoToVisitedParagraph(string paragraphText)
+        public void GoToVisitedParagraph(int paragraphIndex)
         {
-            _currentParagraph = _myBook.GetParagraphIndex(paragraphText);
+            UpdateMessage(paragraphIndex, -1);
+            _currentParagraph = paragraphIndex;
             AdjustVisitedParagraphs(_currentParagraph);
         }
 
-        public string GetParagraphContent() => _myBook.GetParagraphText(_currentParagraph); 
+        
 
         private void AdjustVisitedParagraphs(int currentParagraph)
         {
             for (var i = _visitedParagraphs.Count-1; i >= 0; i--)
             {
                 if (_visitedParagraphs[i].Equals(currentParagraph)) return;
+                if (_readingHistory.ContainsKey(_visitedParagraphs[^1]))
+                {
+                    _readingHistory.Remove(_visitedParagraphs[^1]);
+                }
                 _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
             }
         }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,48 +10,69 @@ namespace GameBook.ViewModel
 {
     public class GameBookViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IReadingSession _readingSession;
         public ObservableCollection<ChoiceViewModel> Choices { get; }
+        public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
         private ICommand GoToParagraph { get; }
         public ICommand GoBack { get; }
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         public GameBookViewModel(IReadingSession readingSession)
         {
             GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
             GoBack = ParameterlessRelayCommand.From(DoGoBack);
             _readingSession = readingSession;
             Choices = new ObservableCollection<ChoiceViewModel>();
+            VisitedParagraphs = new ObservableCollection<VisitedParagraphsViewModel>();
             UpdateChoices();
+            UpdateVisitedParagraphs();
         }
 
         private void DoGoToParagraph(ChoiceViewModel choice)
         {
             _readingSession.GoToParagraphByChoice(choice.Destination);
-            UpdateChoices();
-            OnPropertyChanged(nameof(Choices));
-            OnPropertyChanged(nameof(CurrentParagraph));
-            OnPropertyChanged(nameof(ParagraphContent));
-            OnPropertyChanged(nameof(WarningMessage));
+            Refresh();
+        }
+
+        private void DoGoToKnownParagraph(VisitedParagraphsViewModel visitedParagraph)
+        {
+            _readingSession.GoToVisitedParagraph(visitedParagraph.Index);
+            Refresh();
         }
 
         private void DoGoBack()
         {
             _readingSession.GoBackToPrevious();
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             UpdateChoices();
+            UpdateVisitedParagraphs();
             OnPropertyChanged(nameof(Choices));
             OnPropertyChanged(nameof(CurrentParagraph));
             OnPropertyChanged(nameof(ParagraphContent));
             OnPropertyChanged(nameof(WarningMessage));
+            OnPropertyChanged(nameof(VisitedParagraphs));
         }
 
         private void UpdateChoices()
         {
             Choices.Clear();
             
-            foreach (var choice in _readingSession.GetParagraphChoices(_readingSession.GetCurrentParagraph()))
+            foreach (var (key, value) in _readingSession.GetParagraphChoices(_readingSession.GetCurrentParagraph()))
             {
-                Choices.Add(new ChoiceViewModel(choice.Key, choice.Value, GoToParagraph));
+                Choices.Add(new ChoiceViewModel(key, value, GoToParagraph));
+            }
+        }
+
+        private void UpdateVisitedParagraphs()
+        {
+            VisitedParagraphs.Clear();
+            foreach (var (key, value) in _readingSession.GetHistory())
+            {
+                VisitedParagraphs.Add(new VisitedParagraphsViewModel(key, value));
             }
         }
 
@@ -64,18 +84,17 @@ namespace GameBook.ViewModel
 
         public string WarningMessage => _readingSession.WarningMessage;
 
-        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => _readingSession.GetParagraphChoices(paragraphIndex);
-
-        public bool StoryEnded() => _readingSession.HasStoryEnded();
-
-        public IEnumerable<string> GetVisitedParagraphs() => _readingSession.GetVisitedParagraphs();
-
-        public void GoBackToPrevious() => _readingSession.GoBackToPrevious();
-
-        public void GoToVisitedParagraph(string paragraphText) => _readingSession.GoToVisitedParagraph(paragraphText);
+        public VisitedParagraphsViewModel SelectedParagraph
+        {
+            set
+            {
+                if (value == null) return;
+                DoGoToKnownParagraph(value);
+            }
+        }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -92,6 +111,16 @@ namespace GameBook.ViewModel
             Destination = destination;
             GoToParagraph = goToParagraph;
         }
+    }
 
+    public class VisitedParagraphsViewModel
+    {
+        public string Label { get; }
+        public int Index { get; }
+        public VisitedParagraphsViewModel(int key, string value)
+        {
+            Index = key;
+            Label = value;
+        }
     }
 }

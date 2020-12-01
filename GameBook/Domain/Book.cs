@@ -22,38 +22,11 @@ namespace GameBook.Domain
 
         public string GetParagraphText(int paragraphIndex) => Paragraphs[paragraphIndex].Text;
 
-        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex)
-        {
-            return Paragraphs[paragraphIndex].GetChoices();
-        }
-
-        public int GetChoiceDestination(int currentParagraph, int choiceIndex) =>
-            Paragraphs[currentParagraph].GetChoiceDestination(choiceIndex);
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => 
+            Paragraphs[paragraphIndex].GetChoices();
 
         public bool ParagraphIsFinal(int currentParagraph) => Paragraphs[currentParagraph].IsTerminal();
 
-        public IEnumerable<string> GetParagraphsLabels(IEnumerable<int> visitedParagraphs)
-        {
-            IList<string> paragraphLabels = new List<string>();
-            foreach (var paragraph in visitedParagraphs)
-            {
-                paragraphLabels.Add((Paragraphs[paragraph].GetLabel()));
-            }
-
-            return paragraphLabels;
-        }
-
-        public int GetParagraphIndex(string paragraphText)
-        {
-            paragraphText = paragraphText.Substring(0, paragraphText.Length - 5);
-            foreach (var paragraph in Paragraphs.Values)
-            {
-                if (paragraph.Text.StartsWith(paragraphText))
-                {
-                    return paragraph.Index;
-                }
-            }
-            return -1;
-        }
+        public string GetParagraphLabel(int paragraphIndex) => Paragraphs[paragraphIndex].GetLabel();
     }
 }
