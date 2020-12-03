@@ -16,11 +16,13 @@ namespace GameBook.ViewModel
         public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
         private ICommand GoToParagraph { get; }
         public ICommand GoBack { get; }
+        public ICommand Open { get; }
         
         public GameBookViewModel(IReadingSession readingSession)
         {
             GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
             GoBack = ParameterlessRelayCommand.From(DoGoBack);
+            Open = ParameterlessRelayCommand.From(DoOpen);
             _readingSession = readingSession;
             Choices = new ObservableCollection<ChoiceViewModel>();
             VisitedParagraphs = new ObservableCollection<VisitedParagraphsViewModel>();
@@ -45,7 +47,11 @@ namespace GameBook.ViewModel
             _readingSession.GoBackToPrevious();
             Refresh();
         }
-
+        
+        private void DoOpen()
+        {
+            
+        }
         private void Refresh()
         {
             UpdateChoices();

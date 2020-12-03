@@ -93,8 +93,6 @@ namespace GameBook.Domain
             AdjustVisitedParagraphs(_currentParagraph);
         }
 
-        
-
         private void AdjustVisitedParagraphs(int currentParagraph)
         {
             for (var i = _visitedParagraphs.Count-1; i >= 0; i--)
