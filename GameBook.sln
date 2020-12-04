@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Tests", "GameBook.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Wpf", "GameBook.Wpf\GameBook.Wpf.csproj", "{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.ViewModel", "GameBook.ViewModel\GameBook.ViewModel.csproj", "{E9347A89-E65B-4693-808D-A52A5555885E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9347A89-E65B-4693-808D-A52A5555885E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9347A89-E65B-4693-808D-A52A5555885E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9347A89-E65B-4693-808D-A52A5555885E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9347A89-E65B-4693-808D-A52A5555885E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

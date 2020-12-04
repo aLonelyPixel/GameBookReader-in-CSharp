@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameBook.ViewModel\GameBook.ViewModel.csproj" />
     <ProjectReference Include="..\GameBook\GameBook.csproj" />
   </ItemGroup>
 

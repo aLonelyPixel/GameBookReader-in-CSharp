@@ -1,9 +1,9 @@
 ﻿<Application x:Class="GameBook.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModel="clr-namespace:GameBook.ViewModel;assembly=GameBook.ViewModel"
+             xmlns:viewModels="clr-namespace:GameBook.Wpf.ViewModels"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <viewModel:GameBookViewModelLocator x:Key="Locator" />
+        <viewModels:GameBookViewModelLocator x:Key="Locator" />
     </Application.Resources>
 </Application>

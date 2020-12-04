@@ -10,8 +10,11 @@ namespace GameBook.Domain
         public IDictionary<string, int> GetParagraphChoices(int paragraphIndex);
         public void GoToParagraphByChoice(int choiceIndex);
         public IDictionary<int, string> GetHistory();
+        public IList<int> GetVisitedParagraphs();
         public void GoBackToPrevious();
         public string GetParagraphContent();
         public void GoToVisitedParagraph(int paragraphIndex);
+        void SetCurrentParagraph(int last);
+        void SetVisitedParagraphs(IList<int> visitedParagraphs);
     }
 }

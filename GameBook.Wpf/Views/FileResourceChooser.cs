@@ -1,6 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using GameBook.Wpf.ViewModels;
+using Microsoft.Win32;
 
-namespace GameBook.Wpf
+namespace GameBook.Wpf.Views
 {
     public class FileResourceChooser : IChooseResource
     {
@@ -17,6 +18,5 @@ namespace GameBook.Wpf
                 return filePath;
             }
         }
-
     }
 }

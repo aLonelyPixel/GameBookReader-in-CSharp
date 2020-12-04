@@ -6,7 +6,7 @@ namespace GameBook.Domain
     {
         private readonly IBook _myBook;
         private int _currentParagraph;
-        private readonly IList<int> _visitedParagraphs;
+        private IList<int> _visitedParagraphs;
         private readonly IDictionary<int, string> _readingHistory;
         public string WarningMessage { get; set;}
 
@@ -72,7 +72,9 @@ namespace GameBook.Domain
             }
         }
 
-        public void GoBackToPrevious()
+        public IList<int> GetVisitedParagraphs() => _visitedParagraphs;
+
+         public void GoBackToPrevious()
         {
             if (_visitedParagraphs.Count < 2) return;
             if (_readingHistory.ContainsKey(_visitedParagraphs[^1]))
@@ -104,6 +106,17 @@ namespace GameBook.Domain
                 }
                 _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
             }
+        }
+
+        public void SetCurrentParagraph(int last)
+        {
+            _currentParagraph = last;
+        }
+
+        public void SetVisitedParagraphs(IList<int> visitedParagraphs)
+        {
+            _visitedParagraphs = visitedParagraphs;
+            UpdateHistory();
         }
     }
 }

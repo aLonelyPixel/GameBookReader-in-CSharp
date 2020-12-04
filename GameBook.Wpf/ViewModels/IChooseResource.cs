@@ -1,4 +1,4 @@
-﻿namespace GameBook.Wpf
+﻿namespace GameBook.Wpf.ViewModels
 {
     public interface IChooseResource
     {
