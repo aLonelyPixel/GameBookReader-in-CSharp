@@ -5,8 +5,8 @@ namespace GameBook.io
 {
     public interface IReadingSessionRepository
     {
-        public void Save(IReadingSession readingSession);
+        public void Save(IReadingSession readingSession, string path);
 
-        public IList<int>[] Open(IReadingSession readingSession);
+        public IList<int> Open(string bookTitle, string path);
     }
 }

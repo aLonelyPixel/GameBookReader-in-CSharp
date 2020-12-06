@@ -8,96 +8,86 @@ namespace GameBook.io
 {
     public class SaveReadingSession : IReadingSessionRepository
     {
-        private IReadingSession _readingSession;
-        public SaveReadingSession(IReadingSession readingSession)
-        {
-            _readingSession = readingSession;
-        }
-        
-        public void Save(IReadingSession readingSession)
-        {
-            SaveSessions mySaveSessions = new SaveSessions();
-            mySaveSessions.AddBookSession(readingSession.GetBookTitle(), readingSession.GetVisitedParagraphs());
 
-            if (!File.Exists(@"C:\Users\andre\Desktop\readingSession.json"))
+        public void Save(IReadingSession readingSession, string path) //TODO doesnt need the whole reading session, adapt parameters
+        {
+            JObject newSessions =
+                new JObject(
+                    new JProperty("booksSaved",
+                        new JArray(
+                            new JObject(
+                                new JProperty(readingSession.GetBookTitle(),
+                                    new JObject((
+                                        new JProperty("visitedParagraphs",
+                                            new JArray(readingSession.GetVisitedParagraphs())))))))));
+
+            if (!File.Exists(path))
             {
-                File.WriteAllText(@"C:\Users\andre\Desktop\readingSession.json", JsonConvert.SerializeObject(mySaveSessions));
+                File.WriteAllText(path, newSessions.ToString());
             }
             else
             {
-                using (StreamReader file = File.OpenText(@"C:\Users\andre\Desktop\readingSession.json"))
+                var sameBook = false;
+                JObject newBookSession = new JObject(
+                    new JProperty(readingSession.GetBookTitle(),
+                        new JObject(
+                            new JProperty("visitedParagraphs",
+                                new JArray(readingSession.GetVisitedParagraphs())))));
+
+                using (StreamReader file = File.OpenText(path))
                 using (JsonTextReader reader = new JsonTextReader(file))
                 {
                     JObject mainObject = (JObject) JToken.ReadFrom(reader);
-                    JToken myBooks = mainObject["_booksSaved"];
-                    if (myBooks != null)
-                        foreach (KeyValuePair<string, JToken> thisVar in (JObject) myBooks)
+                    foreach (var bookCollection in mainObject["booksSaved"])
+                    {
+                        foreach (KeyValuePair<string, JToken> book in (JObject) bookCollection)
                         {
-                            if (thisVar.Key == readingSession.GetBookTitle())
+                            if (book.Key == readingSession.GetBookTitle())
                             {
-                                
+                                sameBook = true;
                             }
                         }
-                    
+                    }
                 }
-                
-                using (StreamWriter file = File.AppendText(@"C:\Users\andre\Desktop\readingSession.json"))
+
+                if (sameBook)
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, mySaveSessions);
+                    File.WriteAllText(path, newSessions.ToString());
+                }
+                else
+                {
+                    JObject oldSession = JObject.Parse(File.ReadAllText(path));
+                    JArray bookCollection = (JArray)oldSession["booksSaved"];
+                    bookCollection?.Add(newBookSession);
+                    var updatedSessions = new JObject(
+                        new JProperty("booksSaved", bookCollection));
+                    File.WriteAllText(path, updatedSessions.ToString());
                 }
             }
         }
 
-        public IList<int>[] Open(IReadingSession readingSession)
+        public IList<int> Open(string bookTitle, string path)
         {
-            if (File.Exists(@"C:\Users\andre\Desktop\readingSession.json"))
+            if (File.Exists(path))
             {
-                IList<int>[] lastSessionInfo = new IList<int>[2];
-                lastSessionInfo[0] = new List<int>();
-                lastSessionInfo[1] = new List<int>();
-                using (StreamReader file = File.OpenText(@"C:\Users\andre\Desktop\readingSession.json"))
-                using (JsonTextReader reader = new JsonTextReader(file))
+                IList<int> lastSessionInfo = new List<int>();
+
+                using StreamReader file = File.OpenText(path);
+                using JsonTextReader reader = new JsonTextReader(file);
+                JObject mainObject = (JObject)JToken.ReadFrom(reader);
+                foreach (var bookCollection in mainObject["booksSaved"])
                 {
-                    JObject mainObject = (JObject)JToken.ReadFrom(reader);
-                    JToken myBooks = mainObject["_booksSaved"];
-                    if (myBooks != null)
-                        foreach (KeyValuePair<string, JToken> thisVar in (JObject)myBooks)
+                    foreach (KeyValuePair<string, JToken> book in (JObject)bookCollection)
+                    {
+                        if (book.Key == bookTitle)
                         {
-                            if (thisVar.Key == readingSession.GetBookTitle())
-                            {
-                                lastSessionInfo[0].Add((int)thisVar.Value["_visitedParagraphs"]?.Last);
-                                lastSessionInfo[1] = (thisVar.Value?["_visitedParagraphs"]?.ToObject<List<int>>());
-                            }
+                            lastSessionInfo = (book.Value?["visitedParagraphs"]?.ToObject<List<int>>());
                         }
-                    return lastSessionInfo;
+                    }
                 }
+                return lastSessionInfo;
             }
             return null;
-        }
-    }
-
-    public class SaveSessions
-    {
-        public readonly IDictionary<string, VisitedParagraphs> _booksSaved;
-
-        public SaveSessions()
-        {
-            _booksSaved = new Dictionary<string, VisitedParagraphs>();
-        }
-
-        public void AddBookSession(string bookName, IList<int> visitedParagraphs) 
-            => _booksSaved.Add(bookName, new VisitedParagraphs(visitedParagraphs));
-
-    }
-
-    public class VisitedParagraphs
-    {
-        public IList<int> _visitedParagraphs;
-
-        public VisitedParagraphs(IList<int> visitedParagraphs)
-        {
-            _visitedParagraphs = new List<int>(visitedParagraphs);
         }
     }
 }

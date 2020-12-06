@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GameBook.Domain
 {
@@ -95,6 +96,13 @@ namespace GameBook.Domain
             AdjustVisitedParagraphs(_currentParagraph);
         }
 
+        public void OpenLastSession(IList<int> lastSession)
+        {
+            _currentParagraph = lastSession.Last();
+            _visitedParagraphs = lastSession;
+            UpdateHistory();
+        }
+
         private void AdjustVisitedParagraphs(int currentParagraph)
         {
             for (var i = _visitedParagraphs.Count-1; i >= 0; i--)
@@ -108,15 +116,6 @@ namespace GameBook.Domain
             }
         }
 
-        public void SetCurrentParagraph(int last)
-        {
-            _currentParagraph = last;
-        }
 
-        public void SetVisitedParagraphs(IList<int> visitedParagraphs)
-        {
-            _visitedParagraphs = visitedParagraphs;
-            UpdateHistory();
-        }
     }
 }

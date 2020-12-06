@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using GameBook.Domain;
@@ -16,9 +14,10 @@ namespace GameBook.Wpf.ViewModels
     public class GameBookViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly string _sessionFilePath;
         private readonly IReadingSession _readingSession;
         private readonly IChooseResource _chooser;
-        private IReadingSessionRepository _sessionRepository;
+        private readonly IReadingSessionRepository _sessionRepository;
         public ObservableCollection<ChoiceViewModel> Choices { get; }
         public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
         private ICommand GoToParagraph { get; }
@@ -35,6 +34,7 @@ namespace GameBook.Wpf.ViewModels
             _readingSession = readingSession;
             _chooser = chooser;
             _sessionRepository = sessionRepository;
+            _sessionFilePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
             Choices = new ObservableCollection<ChoiceViewModel>();
             VisitedParagraphs = new ObservableCollection<VisitedParagraphsViewModel>();
             OpenLastSession();
@@ -44,10 +44,9 @@ namespace GameBook.Wpf.ViewModels
 
         private void OpenLastSession()
         {
-            IList<int>[] myList = _sessionRepository.Open(_readingSession);
-            if (myList == null) return;
-            _readingSession.SetCurrentParagraph(myList[0].Last());
-            _readingSession.SetVisitedParagraphs(myList[1]);
+            IList<int> lastSession = _sessionRepository.Open(_readingSession.GetBookTitle(), _sessionFilePath);
+            if (lastSession == null || lastSession.Count == 0) return;
+            _readingSession.OpenLastSession(lastSession);
         }
 
         private void DoGoToParagraph(ChoiceViewModel choice)
@@ -78,7 +77,7 @@ namespace GameBook.Wpf.ViewModels
 
         private void DoSaveOnClose()
         {
-            _sessionRepository.Save(_readingSession);
+            _sessionRepository.Save(_readingSession, _sessionFilePath);
         }
 
         private void Refresh()

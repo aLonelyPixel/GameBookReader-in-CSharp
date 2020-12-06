@@ -14,7 +14,6 @@ namespace GameBook.Domain
         public void GoBackToPrevious();
         public string GetParagraphContent();
         public void GoToVisitedParagraph(int paragraphIndex);
-        void SetCurrentParagraph(int last);
-        void SetVisitedParagraphs(IList<int> visitedParagraphs);
+        void OpenLastSession(IList<int> lastSession);
     }
 }
