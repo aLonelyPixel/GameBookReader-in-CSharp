@@ -13,6 +13,15 @@ namespace GameBook.Domain
             }
         }
 
+        public Book(string bookName, IList<Paragraph> newParagraphs)
+        {
+            Name = bookName;
+            foreach (var paragraphs in newParagraphs)
+            {
+                Paragraphs.Add(paragraphs.Index, paragraphs);
+            }
+        }
+
         public string Name { get; }
         public Dictionary<int, Paragraph> Paragraphs { get; } = new Dictionary<int, Paragraph>();
 

@@ -14,6 +14,16 @@ namespace GameBook.Domain
             }
         }
 
+        public Paragraph(int index, string text, IList<Choice> choices)
+        {
+            Index = index;
+            Text = text;
+            foreach (var choice in choices)
+            {
+                Choices.Add(choice);
+            }
+        }
+
         public virtual string Text { get; }
 
         public IList<Choice> Choices { get; } = new List<Choice>();

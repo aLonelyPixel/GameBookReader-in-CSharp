@@ -20,13 +20,18 @@ namespace GameBook.Wpf.ViewModels
         private readonly IReadingSessionRepository _sessionRepository;
         public ObservableCollection<ChoiceViewModel> Choices { get; }
         public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
+        public ICommand LoadBook { get; private set; }
         private ICommand GoToParagraph { get; }
         public ICommand GoBack { get; }
-        public ICommand Open { get; }
+        private ICommand Open { get; }
         public ICommand SaveOnClose { get; }
-
+        
         public GameBookViewModel(IReadingSession readingSession, IChooseResource chooser, IReadingSessionRepository sessionRepository)
         {
+            LoadBook = ParameterlessRelayCommand.From(() =>
+            {
+                var path = _chooser.ResourceIdentifier;
+            });
             GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
             GoBack = ParameterlessRelayCommand.From(DoGoBack);
             Open = ParameterlessRelayCommand.From(DoOpen);
@@ -69,6 +74,7 @@ namespace GameBook.Wpf.ViewModels
         
         private void DoOpen()
         {
+            
             using (TextReader fileStream = File.OpenText(_chooser.ResourceIdentifier))
             {
 

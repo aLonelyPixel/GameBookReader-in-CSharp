@@ -5,7 +5,7 @@ namespace GameBook.Domain
 {
     public class ReadingSession : IReadingSession
     {
-        private readonly IBook _myBook;
+        private IBook _myBook;
         private int _currentParagraph;
         private IList<int> _visitedParagraphs;
         private readonly IDictionary<int, string> _readingHistory;
@@ -116,6 +116,9 @@ namespace GameBook.Domain
             }
         }
 
-
+        public void SetBook(Book newBook)
+        {
+            _myBook = newBook;
+        }
     }
 }

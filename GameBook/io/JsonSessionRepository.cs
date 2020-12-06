@@ -6,13 +6,23 @@ using Newtonsoft.Json.Linq;
 
 namespace GameBook.io
 {
-    public class SaveReadingSession : IReadingSessionRepository
+    public class JsonSessionRepository : IReadingSessionRepository
     {
+        string _sessionFilePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
+
+        public string GetLastBookRead()
+        {
+            using StreamReader file = File.OpenText(_sessionFilePath);
+            using JsonTextReader reader = new JsonTextReader(file);
+            JObject mainJObject = (JObject) JToken.ReadFrom(reader);
+            return (string) mainJObject["LastBookPath"];
+        }
 
         public void Save(IReadingSession readingSession, string path) //TODO doesnt need the whole reading session, adapt parameters
         {
             JObject newSessions =
                 new JObject(
+                    new JProperty("LastBookPath", ""),
                     new JProperty("booksSaved",
                         new JArray(
                             new JObject(
