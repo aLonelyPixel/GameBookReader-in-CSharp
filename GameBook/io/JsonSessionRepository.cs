@@ -22,7 +22,7 @@ namespace GameBook.io
         {
             JObject newSessions =
                 new JObject(
-                    new JProperty("LastBookPath", ""),
+                   // new JProperty("LastBookPath", ""),
                     new JProperty("booksSaved",
                         new JArray(
                             new JObject(
