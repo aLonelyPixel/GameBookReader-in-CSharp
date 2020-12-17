@@ -17,7 +17,7 @@ namespace GameBook.Wpf.ViewModels
         private readonly IReadingSessionRepository _sessionRepository;
         public ObservableCollection<ChoiceViewModel> Choices { get; }
         public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
-        public ICommand LoadBook { get; private set; }
+        public ICommand LoadBook { get; }
         private ICommand GoToParagraph { get; }
         public ICommand GoBack { get; }
         public ICommand SaveOnClose { get; }
@@ -85,6 +85,7 @@ namespace GameBook.Wpf.ViewModels
 
         private void DoSaveOnClose()
         {
+            if (_readingSession.IsFakeBook()) return;
             _sessionRepository.Save(_readingSession.GetBookTitle(), _readingSession.GetVisitedParagraphs(), _readingSession.Path);
         }
 

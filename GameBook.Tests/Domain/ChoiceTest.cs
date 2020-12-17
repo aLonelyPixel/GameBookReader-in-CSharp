@@ -1,9 +1,9 @@
 using GameBook.Domain;
-using Moq;
 using NUnit.Framework;
 
 namespace GameBook.Tests.Domain
 {
+    [TestFixture]
     public class ChoiceTest
     {
         [Test]
