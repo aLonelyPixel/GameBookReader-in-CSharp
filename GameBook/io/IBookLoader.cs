@@ -2,7 +2,7 @@
 
 namespace GameBook.io
 {
-    public interface IJsonLoader
+    public interface IBookLoader
     {
         public IBook LoadBook(string path);
     }

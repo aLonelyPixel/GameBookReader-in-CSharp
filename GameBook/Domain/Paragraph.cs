@@ -14,7 +14,7 @@ namespace GameBook.Domain
             }
         }
 
-        public Paragraph(int index, string text, IList<Choice> choices)
+        public Paragraph(int index, string text, IEnumerable<Choice> choices)
         {
             Index = index;
             Text = text;
@@ -58,7 +58,6 @@ namespace GameBook.Domain
                     label += firstWords[i] + " ";
                 }
             }
-
             return $"{label}...";
         }
     }

@@ -41,7 +41,7 @@ namespace GameBook.Wpf.ViewModels
         private void OpenLastSession()
         {
             if (_sessionRepository.OpenLastSession().Equals("")) return;
-            IJsonLoader loader = new MyJsonLoader();
+            IBookLoader loader = new JsonLoader();
             _readingSession.SetBook(loader.LoadBook(_sessionRepository.OpenLastSession()), _sessionRepository.OpenLastSession());
             var lastSession = _sessionRepository.Open(_readingSession.GetBookTitle());
             if (lastSession == null || lastSession.Count == 0) return;
@@ -77,7 +77,7 @@ namespace GameBook.Wpf.ViewModels
         {
             if (!_readingSession.IsFakeBook()) DoSaveOnClose();
             var path = _chooser.ResourceIdentifier;
-            IJsonLoader loader = new MyJsonLoader();
+            IBookLoader loader = new JsonLoader();
             _readingSession.SetBook(loader.LoadBook(path), path);
             OpenSavedSession();
             Refresh();

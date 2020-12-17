@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GameBook.io
 {
-    public class MyJsonLoader : IJsonLoader
+    public class JsonLoader : IBookLoader
     {
         public IBook LoadBook(string path)
         {

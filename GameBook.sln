@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook", "GameBook\GameBook.csproj", "{E6DEF860-999E-4BEF-B958-9978CAAEF722}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Terminal", "GameBook.Terminal\GameBook.Terminal.csproj", "{30D37C45-10C5-45BA-8484-7A1A6234D700}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Tests", "GameBook.Tests\GameBook.Tests.csproj", "{05CBF619-5629-409F-8A9F-1146A61F159A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBook.Wpf", "GameBook.Wpf\GameBook.Wpf.csproj", "{0611FB7A-CFFD-483C-A916-FC5CBCBE807E}"
@@ -21,10 +19,6 @@ Global
 		{E6DEF860-999E-4BEF-B958-9978CAAEF722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6DEF860-999E-4BEF-B958-9978CAAEF722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6DEF860-999E-4BEF-B958-9978CAAEF722}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30D37C45-10C5-45BA-8484-7A1A6234D700}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30D37C45-10C5-45BA-8484-7A1A6234D700}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30D37C45-10C5-45BA-8484-7A1A6234D700}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30D37C45-10C5-45BA-8484-7A1A6234D700}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05CBF619-5629-409F-8A9F-1146A61F159A}.Release|Any CPU.ActiveCfg = Release|Any CPU
