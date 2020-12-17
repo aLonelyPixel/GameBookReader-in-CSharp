@@ -13,7 +13,7 @@ namespace GameBook.Domain
             }
         }
 
-        public Book(string bookName, IList<Paragraph> newParagraphs)
+        public Book(string bookName, IEnumerable<Paragraph> newParagraphs)
         {
             Name = bookName;
             foreach (var paragraphs in newParagraphs)
@@ -23,12 +23,9 @@ namespace GameBook.Domain
         }
 
         public string Name { get; }
-        public Dictionary<int, Paragraph> Paragraphs { get; } = new Dictionary<int, Paragraph>();
+        private Dictionary<int, Paragraph> Paragraphs { get; } = new Dictionary<int, Paragraph>();
 
-        public bool ContainsParagraph(int paragraphIndex) => Paragraphs.ContainsKey(paragraphIndex);
-        
-        public Paragraph GetParagraph(int paragraphIndex) 
-            => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex] : new Paragraph(0, "");
+        private bool ContainsParagraph(int paragraphIndex) => Paragraphs.ContainsKey(paragraphIndex);
 
         public string GetParagraphText(int paragraphIndex)
             => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex].Text : null;

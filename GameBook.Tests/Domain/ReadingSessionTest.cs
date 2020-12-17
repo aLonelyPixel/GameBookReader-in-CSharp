@@ -1,4 +1,4 @@
-﻿/*using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GameBook.Domain;
 using Moq;
@@ -12,167 +12,133 @@ namespace GameBook.Tests.Domain
         [Test]
         public void InitialisedValues()
         {
-            Mock<Book> bookMock = new Mock<Book>("A very cool book");
-            ReadingSession readingSession = new ReadingSession(bookMock.Object);
+            var rs = new ReadingSession();
 
-            Assert.AreEqual(1, readingSession.GetCurrentParagraph());
-            Assert.AreEqual("A very cool book", readingSession.GetBookTitle());
+            Assert.AreEqual(1, rs.GetCurrentParagraph());
+
+            var bookMock = new Mock<IBook>();
+            bookMock.Setup(book => book.Name).Returns("Cool book");
+            rs.SetBook(bookMock.Object, "");
+
+            Assert.AreEqual("Cool book", rs.GetBookTitle());
+            Assert.AreEqual("", rs.Path);
+            Assert.AreEqual("No message", rs.WarningMessage);
+        }
+        
+        [Test]
+        public void GetBookTitleBehaviour()
+        {
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            rs.GetBookTitle();
+
+            bookMock.Verify(book => book.Name, Times.Once);
         }
 
         [Test]
-        public void GetParagraphTextTestingBehaviour()
+        public void GetParagraphTextBehaviour()
         {
-            Mock<Paragraph> paragraphMock1 = new Mock<Paragraph>(1, "this is the first paragraph");
-            Mock<Book> bookMock = new Mock<Book>("A very cool book", paragraphMock1.Object);
-            ReadingSession readingSession = new ReadingSession(bookMock.Object);
-            //readingSession.GetParagraphText(0);
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            rs.GetParagraphContent();
 
-            bookMock.Verify(book => book.GetParagraphText(0), Times.Once);
+            bookMock.Verify(book => book.GetParagraphText(1), Times.Once);
         }
 
         [Test]
-        public void GetParagraphTextTestingValues()
+        public void GetParagraphChoicesBehaviour()
         {
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph");
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph");
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            //readingSession.GetParagraphText(1);
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            rs.GetParagraphChoices(1);
 
-            //Assert.AreEqual("this is the first paragraph", readingSession.GetParagraphText(1));
-        }
-
-        [Test]
-        public void GetParagraphChoicesTestingBehaviour()
-        {
-            Mock<Paragraph> paragraphMock1 = new Mock<Paragraph>(1, "this is the first paragraph");
-            Mock<Book> bookMock = new Mock<Book>("A very cool book", paragraphMock1.Object);
-            ReadingSession readingSession = new ReadingSession(bookMock.Object);
-            readingSession.GetParagraphChoices(0);
-
-            bookMock.Verify(book => book.GetParagraphChoices(0), Times.Once);
+            bookMock.Verify(book => book.GetParagraphChoices(1), Times.Once);
         }
 
         [Test]
         public void GoToParagraphByChoice()
         {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            rs.GoToParagraphByChoice(2);
 
-            Assert.AreEqual(2, readingSession.GetCurrentParagraph());
-
-            readingSession.GoToParagraphByChoice(0);
-
-            Assert.AreEqual(1, readingSession.GetCurrentParagraph());
+            Assert.AreEqual(2, rs.GetCurrentParagraph());
+            bookMock.Verify(book => book.ParagraphIsFinal(2), Times.Once);
         }
 
         [Test]
-        public void GetVisitedParagraphs()
+        public void GetReadingHistory()
         {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
-            readingSession.GoToParagraphByChoice(0);
-            //IList<string> list = (IList<string>)readingSession.GetVisitedParagraphs();
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            rs.GoToParagraphByChoice(2);
+            rs.GoToParagraphByChoice(3);
 
-            //Assert.AreEqual(3, readingSession.GetVisitedParagraphs().Count());
-            //Assert.AreEqual("this is the first ...", list[0]);
-            //Assert.AreEqual("this is the second ...", list[1]);
+            Assert.AreEqual(3, rs.GetHistory().Count);
+            Assert.AreEqual(3, rs.GetVisitedParagraphs().Count);
         }
 
         [Test]
-        public void CheckIfStoryHasEnded()
+        public void ChecksIfFakeBook()
         {
-            Mock<Book> bookMock = new Mock<Book>("A very cool book");
-            ReadingSession readingSession = new ReadingSession(bookMock.Object);
-            //readingSession.HasStoryEnded();
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
 
-            bookMock.Verify(book => book.ParagraphIsFinal(1), Times.Once);
+            Assert.IsTrue(rs.IsFakeBook());
         }
 
         [Test]
-        public void GoBackToPreviousParagraph()
+        public void ResetsAfterOpeningSession()
         {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
-            readingSession.GoToParagraphByChoice(0);
-            readingSession.GoBackToPrevious();
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            IList<int> list = new List<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            rs.OpenLastSession(list);
 
-            Assert.AreEqual(2, readingSession.GetCurrentParagraph());
+            Assert.AreEqual(3, rs.GetCurrentParagraph());
+            Assert.AreEqual(3, rs.GetVisitedParagraphs().Count);
         }
 
         [Test]
-        public void GoBackToPreviousParagraphButYouJustStarted() //You can't go back if you just started reading
+        public void GoesBackToPreviousParagraph()
         {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoBackToPrevious();
-
-            Assert.AreEqual(1, readingSession.GetCurrentParagraph());
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            IList<int> list = new List<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            rs.OpenLastSession(list);
+            rs.GoBackToPrevious();
+            Assert.AreEqual(2, rs.GetCurrentParagraph());
+            Assert.AreEqual(2, rs.GetVisitedParagraphs().Count);
         }
 
         [Test]
-        public void GoToAVisitedParagraph()
+        public void GoesBackToVisitedParagraph()
         {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
-            //readingSession.GoToVisitedParagraph("this is the first ...");
+            var rs = new ReadingSession();
+            var bookMock = new Mock<IBook>();
+            rs.SetBook(bookMock.Object, "");
+            IList<int> list = new List<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            rs.OpenLastSession(list);
+            rs.GoToVisitedParagraph(1);
 
-            Assert.AreEqual(1, readingSession.GetCurrentParagraph());
-        }
-
-        [Test]
-        public void AdjustsVisitedParagraphsWhenGoingBack()
-        {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
-            //readingSession.GoToVisitedParagraph("this is the first ...");
-
-            //Assert.AreEqual(1, readingSession.GetVisitedParagraphs().Count());
-        }
-
-        [Test]
-        public void AdjustsVisitedParagraphsWhenGoingBackButYouJustStarted()
-        {
-            Choice choice1 = new Choice("icantanymorewiththiscovidhelpme", 2);
-            Choice choice2 = new Choice("plsendthis", 1);
-            Paragraph paragraph1 = new Paragraph(1, "this is the first paragraph", choice1);
-            Paragraph paragraph2 = new Paragraph(2, "this is the second paragraph", choice2);
-            Book book = new Book("A very cool book", paragraph1, paragraph2);
-            ReadingSession readingSession = new ReadingSession(book);
-            readingSession.GoToParagraphByChoice(0);
-            readingSession.GoBackToPrevious();
-            //readingSession.GoToVisitedParagraph("this is the first ...");
-
-            //Assert.AreEqual(1, readingSession.GetVisitedParagraphs().Count());
+            Assert.AreEqual(1, rs.GetCurrentParagraph());
+            Assert.AreEqual(1, rs.GetVisitedParagraphs().Count);
         }
     }
-}*/
+}

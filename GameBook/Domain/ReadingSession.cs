@@ -75,8 +75,8 @@ namespace GameBook.Domain
         }
 
         public IList<int> GetVisitedParagraphs() => _visitedParagraphs;
-
-         public void GoBackToPrevious()
+        
+        public void GoBackToPrevious()
         {
             if (_visitedParagraphs.Count < 2) return;
             if (_readingHistory.ContainsKey(_visitedParagraphs[^1]))

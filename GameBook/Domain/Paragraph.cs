@@ -4,16 +4,6 @@ namespace GameBook.Domain
 {
     public class Paragraph
     {
-        public Paragraph(int index, string text, params Choice[] newChoices)
-        {
-            Index = index;
-            Text = text;
-            foreach (var choice in newChoices)
-            {
-                Choices.Add(choice);
-            }
-        }
-
         public Paragraph(int index, string text, IEnumerable<Choice> choices)
         {
             Index = index;
