@@ -18,16 +18,19 @@ namespace GameBook.io
             JObject mainObject = (JObject) JToken.ReadFrom(jtr);
             var bookTitle = mainObject["Title"]?.ToString();
             JArray paragraphs = (JArray)mainObject["Paragraphs"];
-            foreach (var paragraph in (JArray)paragraphs)
-            {
-                IList<Choice> choiceList = new List<Choice>();
-                JArray choices = (JArray) paragraph["Choices"];
-                foreach (var choice in choices)
+            if (paragraphs != null)
+                foreach (var paragraph in (JArray) paragraphs)
                 {
-                    choiceList.Add(new Choice((string)choice["Choice text"], (int)choice["Destination paragraph"]));
+                    IList<Choice> choiceList = new List<Choice>();
+                    JArray choices = (JArray) paragraph["Choices"];
+                    foreach (var choice in choices)
+                    {
+                        choiceList.Add(
+                            new Choice((string) choice["Choice text"], (int) choice["Destination paragraph"]));
+                    }
+
+                    paragraphList.Add(new Paragraph((int) paragraph["Index"], (string) paragraph["Text"], choiceList));
                 }
-                paragraphList.Add(new Paragraph((int)paragraph["Index"], (string)paragraph["Text"], choiceList));
-            }
 
             return new Book(bookTitle, paragraphList);
         }
