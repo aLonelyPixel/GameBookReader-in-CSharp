@@ -10,10 +10,11 @@ namespace GameBook.Domain
         private IList<int> _visitedParagraphs;
         private readonly IDictionary<int, string> _readingHistory;
         public string WarningMessage { get; set;}
+        public string Path { get; set; }
 
-        public ReadingSession(IBook book)
+        public ReadingSession()
         { 
-            _myBook = book;
+            _myBook = new Book("Livre vide, veuillez ouvrir un livre");
             _currentParagraph = 1;
             _visitedParagraphs = new List<int> {_currentParagraph};
             _readingHistory = new SortedDictionary<int, string>();
@@ -103,6 +104,16 @@ namespace GameBook.Domain
             UpdateHistory();
         }
 
+        public void SetBook(IBook book, string path)
+        {
+            _myBook = book;
+            _currentParagraph = 1;
+            _visitedParagraphs = new List<int> {_currentParagraph};
+            Path = path;
+        }
+
+        public bool IsFakeBook() => _myBook.Name.Equals("Livre vide, veuillez ouvrir un livre");
+
         private void AdjustVisitedParagraphs(int currentParagraph)
         {
             for (var i = _visitedParagraphs.Count-1; i >= 0; i--)
@@ -114,11 +125,6 @@ namespace GameBook.Domain
                 }
                 _visitedParagraphs.RemoveAt(_visitedParagraphs.Count-1);
             }
-        }
-
-        public void SetBook(Book newBook)
-        {
-            _myBook = newBook;
         }
     }
 }

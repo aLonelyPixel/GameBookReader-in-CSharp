@@ -10,8 +10,9 @@ namespace GameBook.Wpf.ViewModels
 
         public GameBookViewModelLocator()
         {
-            IReadingSession readingSession = new ReadingSession(CreateBook());
+            IReadingSession readingSession = new ReadingSession();
             IReadingSessionRepository sessionRepository = new JsonSessionRepository();
+
             _gameBookViewModel = new GameBookViewModel(readingSession, new FileResourceChooser(), sessionRepository);
         }
 

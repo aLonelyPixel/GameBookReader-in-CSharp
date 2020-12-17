@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using GameBook.Domain;
@@ -14,7 +12,6 @@ namespace GameBook.Wpf.ViewModels
     public class GameBookViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly string _sessionFilePath;
         private readonly IReadingSession _readingSession;
         private readonly IChooseResource _chooser;
         private readonly IReadingSessionRepository _sessionRepository;
@@ -23,23 +20,17 @@ namespace GameBook.Wpf.ViewModels
         public ICommand LoadBook { get; private set; }
         private ICommand GoToParagraph { get; }
         public ICommand GoBack { get; }
-        private ICommand Open { get; }
         public ICommand SaveOnClose { get; }
         
         public GameBookViewModel(IReadingSession readingSession, IChooseResource chooser, IReadingSessionRepository sessionRepository)
         {
-            LoadBook = ParameterlessRelayCommand.From(() =>
-            {
-                var path = _chooser.ResourceIdentifier;
-            });
+            LoadBook = ParameterlessRelayCommand.From((DoOpen));
             GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
             GoBack = ParameterlessRelayCommand.From(DoGoBack);
-            Open = ParameterlessRelayCommand.From(DoOpen);
             SaveOnClose = ParameterlessRelayCommand.From(DoSaveOnClose);
             _readingSession = readingSession;
             _chooser = chooser;
             _sessionRepository = sessionRepository;
-            _sessionFilePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
             Choices = new ObservableCollection<ChoiceViewModel>();
             VisitedParagraphs = new ObservableCollection<VisitedParagraphsViewModel>();
             OpenLastSession();
@@ -49,7 +40,17 @@ namespace GameBook.Wpf.ViewModels
 
         private void OpenLastSession()
         {
-            IList<int> lastSession = _sessionRepository.Open(_readingSession.GetBookTitle());
+            if (_sessionRepository.OpenLastSession().Equals("")) return;
+            IJsonLoader loader = new MyJsonLoader();
+            _readingSession.SetBook(loader.LoadBook(_sessionRepository.OpenLastSession()), _sessionRepository.OpenLastSession());
+            var lastSession = _sessionRepository.Open(_readingSession.GetBookTitle());
+            if (lastSession == null || lastSession.Count == 0) return;
+            _readingSession.OpenLastSession(lastSession);
+        }
+
+        private void OpenSavedSession()
+        {
+            var lastSession = _sessionRepository.Open(_readingSession.GetBookTitle());
             if (lastSession == null || lastSession.Count == 0) return;
             _readingSession.OpenLastSession(lastSession);
         }
@@ -71,24 +72,27 @@ namespace GameBook.Wpf.ViewModels
             _readingSession.GoBackToPrevious();
             Refresh();
         }
-        
+
         private void DoOpen()
         {
-            using (TextReader fileStream = File.OpenText(_chooser.ResourceIdentifier))
-            {
-
-            }
+            if (!_readingSession.IsFakeBook()) DoSaveOnClose();
+            var path = _chooser.ResourceIdentifier;
+            IJsonLoader loader = new MyJsonLoader();
+            _readingSession.SetBook(loader.LoadBook(path), path);
+            OpenSavedSession();
+            Refresh();
         }
 
         private void DoSaveOnClose()
         {
-            _sessionRepository.Save(_readingSession.GetBookTitle(), _readingSession.GetVisitedParagraphs());
+            _sessionRepository.Save(_readingSession.GetBookTitle(), _readingSession.GetVisitedParagraphs(), _readingSession.Path);
         }
 
         private void Refresh()
         {
             UpdateChoices();
             UpdateVisitedParagraphs();
+            OnPropertyChanged(nameof(BookTitle));
             OnPropertyChanged(nameof(Choices));
             OnPropertyChanged(nameof(CurrentParagraph));
             OnPropertyChanged(nameof(ParagraphContent));
@@ -99,7 +103,6 @@ namespace GameBook.Wpf.ViewModels
         private void UpdateChoices()
         {
             Choices.Clear();
-            
             foreach (var (key, value) in _readingSession.GetParagraphChoices(_readingSession.GetCurrentParagraph()))
             {
                 Choices.Add(new ChoiceViewModel(key, value, GoToParagraph));

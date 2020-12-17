@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GameBook.Domain;
-using Moq;
 using NUnit.Framework;
 
 namespace GameBook.Tests.Domain
@@ -11,20 +10,29 @@ namespace GameBook.Tests.Domain
         [Test]
         public void KnowsItsText()
         {
-            Mock<Choice> choicheMock1 = new Mock<Choice>("choice1", 2);
-            Mock<Choice> choicheMock2 = new Mock<Choice>("choice2", 3); 
-            Mock<Choice> choicheMock3 = new Mock<Choice>("choice3", 9);
-            var paragraph1 = new Paragraph(1, "testing this", choicheMock1.Object, choicheMock2.Object, choicheMock3.Object);
+            var choice = new Choice("choice1", 2);
+            var paragraph1 = new Paragraph(1, "testing this", choice);
+            Assert.AreEqual("testing this", paragraph1.Text);
+        }
+
+        [Test]
+        public void InitByList()
+        {
+            var choice1 = new Choice("choice1", 2);
+            var choice2 = new Choice("choice2", 3);
+            var choice3 = new Choice("choice3", 9);
+            var choiceList = new List<Choice> {choice1, choice2, choice3};
+            var paragraph1 = new Paragraph(1, "testing this", choiceList);
             Assert.AreEqual("testing this", paragraph1.Text);
         }
 
         [Test]
         public void KnowsAmountOfChoices()
         {
-            Mock<Choice> choicheMock1 = new Mock<Choice>("choice1", 2);
-            Mock<Choice> choicheMock2 = new Mock<Choice>("choice2", 3);
-            Mock<Choice> choicheMock3 = new Mock<Choice>("choice3", 9);
-            var paragraph1 = new Paragraph(1, "testing this", choicheMock1.Object, choicheMock2.Object, choicheMock3.Object);
+            var choice1 = new Choice("choice1", 2);
+            var choice2 = new Choice("choice2", 3);
+            var choice3 = new Choice("choice3", 9);
+            var paragraph1 = new Paragraph(1, "testing this", choice1, choice2, choice3);
             Assert.AreEqual(3, paragraph1.Choices.Count);
             Assert.IsFalse(paragraph1.IsTerminal());
         }
@@ -37,16 +45,23 @@ namespace GameBook.Tests.Domain
         }
 
         [Test]
+        public void KnowsItsIndex()
+        {
+            var paragraph1 = new Paragraph(7, "testing this");
+            Assert.AreEqual(7, paragraph1.Index);
+        }
+
+        [Test]
         public void GetsChoices()
         {
-            Mock<Choice> choicheMock1 = new Mock<Choice>("choice1", 2);
-            Mock<Choice> choicheMock2 = new Mock<Choice>("choice2", 3);
-            Mock<Choice> choicheMock3 = new Mock<Choice>("choice3", 9);
-            var paragraph1 = new Paragraph(1, "testing this", choicheMock1.Object, choicheMock2.Object, choicheMock3.Object);
-            IList<string> choicesList = new List<string>();
-            choicesList.Add("choice1");
-            choicesList.Add("choice2");
-            choicesList.Add("choice3");
+            var choice1 = new Choice("choice1", 2);
+            var choice2 = new Choice("choice2", 3);
+            var choice3 = new Choice("choice3", 9);
+            var paragraph1 = new Paragraph(1, "testing this", choice1, choice2, choice3);
+            IDictionary<string, int> choicesList = new Dictionary<string, int>();
+            choicesList.Add("choice1", 2);
+            choicesList.Add("choice2", 3);
+            choicesList.Add("choice3", 9);
             
             Assert.AreEqual(choicesList, paragraph1.GetChoices());
         }
@@ -54,10 +69,10 @@ namespace GameBook.Tests.Domain
         [Test]
         public void GetsChoicesDestination()
         {
-            Mock<Choice> choicheMock1 = new Mock<Choice>("choice1", 2);
-            Mock<Choice> choicheMock2 = new Mock<Choice>("choice2", 3);
-            Mock<Choice> choicheMock3 = new Mock<Choice>("choice3", 9);
-            var paragraph1 = new Paragraph(1, "testing this", choicheMock1.Object, choicheMock2.Object, choicheMock3.Object);
+            var choice1 = new Choice("choice1", 2);
+            var choice2 = new Choice("choice2", 3);
+            var choice3 = new Choice("choice3", 9);
+            var paragraph1 = new Paragraph(1, "testing this", choice1, choice2, choice3);
             Assert.AreEqual(2, paragraph1.GetChoiceDestination(0));
             Assert.AreEqual(3, paragraph1.GetChoiceDestination(1));
             Assert.AreEqual(9, paragraph1.GetChoiceDestination(2));

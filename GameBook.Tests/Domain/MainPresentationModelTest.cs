@@ -1,4 +1,4 @@
-﻿using GameBook.Domain;
+﻿/*using GameBook.Domain;
 using GameBook.Model;
 using NUnit.Framework;
 
@@ -44,8 +44,8 @@ namespace GameBook.Tests.Domain
             mpModel.AddReadParagraph(3);
             mpModel.AddReadParagraph(4);
 
-/*            Assert.AreEqual(1, mpModel.GetPreviousParagraph());
-*/        }
+*//*            Assert.AreEqual(1, mpModel.GetPreviousParagraph());
+*//*        }
 
         [Test]
         public void ReturnsErrorOnFirstParagraph()
@@ -54,8 +54,8 @@ namespace GameBook.Tests.Domain
             var mpModel = new MainPresentationModelOLD(myBook);
             mpModel.AddReadParagraph(1);
 
-/*            Assert.AreEqual(1, mpModel.GetPreviousParagraph());
-*/        }
+*//*            Assert.AreEqual(1, mpModel.GetPreviousParagraph());
+*//*        }
 
         [Test]
         public void ReturnsErrorOnNothingRead()
@@ -63,8 +63,8 @@ namespace GameBook.Tests.Domain
             var myBook = new Book("My Cool Book");
             var mpModel = new MainPresentationModelOLD(myBook);
 
-/*            Assert.AreEqual(-1, mpModel.GetPreviousParagraph());
-*/        }
+*//*            Assert.AreEqual(-1, mpModel.GetPreviousParagraph());
+*//*        }
 
         [Test]
         public void HistoryIsEmptyUponReset()
@@ -76,7 +76,7 @@ namespace GameBook.Tests.Domain
             mpModel.AddReadParagraph(4);
             mpModel.ClearHistory();
 
-/*            Assert.AreEqual(-1, mpModel.GetPreviousParagraph());
-*/        }
+*//*            Assert.AreEqual(-1, mpModel.GetPreviousParagraph());
+*//*        }
     }
-}
+}*/

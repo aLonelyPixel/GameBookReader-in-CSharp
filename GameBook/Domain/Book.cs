@@ -27,15 +27,19 @@ namespace GameBook.Domain
 
         public bool ContainsParagraph(int paragraphIndex) => Paragraphs.ContainsKey(paragraphIndex);
         
-        public Paragraph GetParagraph(int paragraphIndex) => Paragraphs[paragraphIndex];
+        public Paragraph GetParagraph(int paragraphIndex) 
+            => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex] : new Paragraph(0, "");
 
-        public string GetParagraphText(int paragraphIndex) => Paragraphs[paragraphIndex].Text;
+        public string GetParagraphText(int paragraphIndex)
+            => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex].Text : null;
 
-        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) => 
-            Paragraphs[paragraphIndex].GetChoices();
+        public IDictionary<string, int> GetParagraphChoices(int paragraphIndex) 
+            => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex].GetChoices() : new Dictionary<string, int>();
 
-        public bool ParagraphIsFinal(int currentParagraph) => Paragraphs[currentParagraph].IsTerminal();
+        public bool ParagraphIsFinal(int currentParagraph) 
+            => ContainsParagraph(currentParagraph) && Paragraphs[currentParagraph].IsTerminal();
 
-        public string GetParagraphLabel(int paragraphIndex) => Paragraphs[paragraphIndex].GetLabel();
+        public string GetParagraphLabel(int paragraphIndex)
+            => ContainsParagraph(paragraphIndex) ? Paragraphs[paragraphIndex].GetLabel() : "";
     }
 }

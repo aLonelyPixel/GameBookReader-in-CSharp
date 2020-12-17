@@ -16,7 +16,7 @@ namespace GameBook.io
             using JsonTextReader jtr = new JsonTextReader(new StreamReader(fs));
 
             JObject mainObject = (JObject) JToken.ReadFrom(jtr);
-            var bookTitle = mainObject["title"]?.ToString();
+            var bookTitle = mainObject["Title"]?.ToString();
             JArray paragraphs = (JArray)mainObject["Paragraphs"];
             foreach (var paragraph in (JArray)paragraphs)
             {

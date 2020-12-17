@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using GameBook.Domain;
 using Moq;
 using NUnit.Framework;
@@ -98,7 +98,7 @@ namespace GameBook.Tests.Domain
             paragraphMock1.Verify(paragraph => paragraph.GetChoices(), Times.Once);
         }
 
-        [Test]
+*//*        [Test]
         public void GetParagraphChoicesTestingValues()
         {
             Choice choiceMock1 = new Choice("choice1", 2);
@@ -113,7 +113,7 @@ namespace GameBook.Tests.Domain
             };
 
             Assert.AreEqual(choicesList, myBook.GetParagraphChoices(1));
-        }
+        }*/
 
 /*        [Test]
         public void GetChoiceDestinationTestingBehaviour()
@@ -125,7 +125,7 @@ namespace GameBook.Tests.Domain
             myBook.GetChoiceDestination(0, 0);
 
             paragraphMock1.Verify(paragraph => paragraph.GetChoiceDestination(0, 0), Times.Once);
-        }*/
+        }*//*
 
         [Test]
         public void GetChoiceDestinationTestingValues()
@@ -136,9 +136,9 @@ namespace GameBook.Tests.Domain
             Paragraph paragraphMock2 = new Paragraph(2, "testing that", choiceMock2);
             var myBook = new Book("My Cool Book", paragraphMock1, paragraphMock2);
 
-            /*Assert.AreEqual(3, myBook.GetChoiceDestination(1, 1));
+            *//*Assert.AreEqual(3, myBook.GetChoiceDestination(1, 1));
             Assert.AreEqual(2, myBook.GetChoiceDestination(1, 0));
-            Assert.AreEqual(3, myBook.GetChoiceDestination(2, 0));*/
+            Assert.AreEqual(3, myBook.GetChoiceDestination(2, 0));*//*
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace GameBook.Tests.Domain
             Assert.IsTrue(myBook.ParagraphIsFinal(2));
         }
 
-        [Test]
+*//*        [Test]
         public void GetsParagraphsLabelsTestingBehaviour()
         {
             Mock<Paragraph> paragraphMock1 = new Mock<Paragraph>(1, "testing this");
@@ -184,7 +184,7 @@ namespace GameBook.Tests.Domain
             //myBook.GetParagraphsLabels(visitedParagraphs);
 
             paragraphMock1.Verify(paragraph => paragraph.GetLabel(), Times.Once);
-        }
+        }*//*
 
         [Test]
         public void GetsParagraphsLabelsTestingValues()
@@ -222,4 +222,4 @@ namespace GameBook.Tests.Domain
             //Assert.AreEqual(-1, myBook.GetParagraphIndex("un paragraphe bidon ..."));
         }
     }
-}
+}*/

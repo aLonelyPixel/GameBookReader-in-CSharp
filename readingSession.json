@@ -1,12 +1,15 @@
 {
-  "Cool book": [
+  "LastBookPath": "C:\\Users\\andre\\Desktop\\myFirstBook.json",
+  "Un deuxi�me livre pour tester": [
     1,
     2,
     3,
     2,
     4
   ],
-  "Bad book": [
-    1
+  "L'histoire d'un homme qui a soif pendant le confinement": [
+    1,
+    2,
+    4
   ]
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using System.Linq;
 using GameBook.Domain;
 using Moq;
@@ -175,4 +175,4 @@ namespace GameBook.Tests.Domain
             //Assert.AreEqual(1, readingSession.GetVisitedParagraphs().Count());
         }
     }
-}
+}*/

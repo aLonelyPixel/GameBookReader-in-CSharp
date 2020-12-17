@@ -24,20 +24,20 @@ namespace GameBook.Domain
             }
         }
 
-        public virtual string Text { get; }
+        public string Text { get; }
 
         public IList<Choice> Choices { get; } = new List<Choice>();
 
-        public virtual int Index { get; }
+        public int Index { get; }
 
-        public virtual bool IsTerminal() => Choices.Count == 0;
+        public bool IsTerminal() => Choices.Count == 0;
 
         public int GetChoiceDestination(in int choiceIndex)
         {
             return choiceIndex >= 0 && choiceIndex < Choices.Count ? Choices[choiceIndex].DestParagraph : -1;
         }
 
-        public virtual IDictionary<string, int> GetChoices()
+        public IDictionary<string, int> GetChoices()
         {
             IDictionary<string, int> choicesDictionary = new Dictionary<string, int>();
             foreach (var choice in Choices)
@@ -47,7 +47,7 @@ namespace GameBook.Domain
             return choicesDictionary;
         }
 
-        public virtual string GetLabel()
+        public string GetLabel()
         {
             var label = "";
             var firstWords = Text.Split(' ');
