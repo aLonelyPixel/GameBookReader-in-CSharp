@@ -1,103 +1,48 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GameBook.Domain;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace GameBook.io
 {
     public class JsonSessionRepository : IReadingSessionRepository
     {
-        string _sessionFilePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
+        private readonly string _relativePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
 
-        public string GetLastBookRead()
+        public void Save(string bookTitle, IList<int> visitedParagraphs)
         {
-            using StreamReader file = File.OpenText(_sessionFilePath);
-            using JsonTextReader reader = new JsonTextReader(file);
-            JObject mainJObject = (JObject) JToken.ReadFrom(reader);
-            return (string) mainJObject["LastBookPath"];
-        }
-
-        public void Save(IReadingSession readingSession, string path) //TODO doesnt need the whole reading session, adapt parameters
-        {
-            JObject newSessions =
-                new JObject(
-                   // new JProperty("LastBookPath", ""),
-                    new JProperty("booksSaved",
-                        new JArray(
-                            new JObject(
-                                new JProperty(readingSession.GetBookTitle(),
-                                    new JObject((
-                                        new JProperty("visitedParagraphs",
-                                            new JArray(readingSession.GetVisitedParagraphs())))))))));
-
-            if (!File.Exists(path))
+            if (File.Exists(_relativePath))
             {
-                File.WriteAllText(path, newSessions.ToString());
+                UpdateSaveFile(bookTitle, visitedParagraphs);
             }
             else
             {
-                var sameBook = false;
-                JObject newBookSession = new JObject(
-                    new JProperty(readingSession.GetBookTitle(),
-                        new JObject(
-                            new JProperty("visitedParagraphs",
-                                new JArray(readingSession.GetVisitedParagraphs())))));
-
-                using (StreamReader file = File.OpenText(path))
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    JObject mainObject = (JObject) JToken.ReadFrom(reader);
-                    foreach (var bookCollection in mainObject["booksSaved"])
-                    {
-                        foreach (KeyValuePair<string, JToken> book in (JObject) bookCollection)
-                        {
-                            if (book.Key == readingSession.GetBookTitle())
-                            {
-                                sameBook = true;
-                            }
-                        }
-                    }
-                }
-
-                if (sameBook)
-                {
-                    File.WriteAllText(path, newSessions.ToString());
-                }
-                else
-                {
-                    JObject oldSession = JObject.Parse(File.ReadAllText(path));
-                    JArray bookCollection = (JArray)oldSession["booksSaved"];
-                    bookCollection?.Add(newBookSession);
-                    var updatedSessions = new JObject(
-                        new JProperty("booksSaved", bookCollection));
-                    File.WriteAllText(path, updatedSessions.ToString());
-                }
+                CreateSaveFile(bookTitle, visitedParagraphs);
             }
         }
 
-        public IList<int> Open(string bookTitle, string path)
+        private void CreateSaveFile(string bookTitle, IList<int> visitedParagraphs)
         {
-            if (File.Exists(path))
-            {
-                IList<int> lastSessionInfo = new List<int>();
+            JObject newSessions =
+                new JObject(
+                    new JProperty(bookTitle,
+                        new JArray(visitedParagraphs)));
+            File.WriteAllText(_relativePath, newSessions.ToString());
+        }
 
-                using StreamReader file = File.OpenText(path);
-                using JsonTextReader reader = new JsonTextReader(file);
-                JObject mainObject = (JObject)JToken.ReadFrom(reader);
-                foreach (var bookCollection in mainObject["booksSaved"])
-                {
-                    foreach (KeyValuePair<string, JToken> book in (JObject)bookCollection)
-                    {
-                        if (book.Key == bookTitle)
-                        {
-                            lastSessionInfo = (book.Value?["visitedParagraphs"]?.ToObject<List<int>>());
-                        }
-                    }
-                }
-                return lastSessionInfo;
-            }
-            return null;
+        private void UpdateSaveFile(string bookTitle, IList<int> visitedParagraphs)
+        {
+            JObject oldSession = JObject.Parse(File.ReadAllText(_relativePath));
+            if (oldSession.ContainsKey(bookTitle)) oldSession.Remove(bookTitle);
+            oldSession.Add(new JProperty(bookTitle,
+                new JArray(visitedParagraphs)));
+            File.WriteAllText(_relativePath, oldSession.ToString());
+        }
+
+        public IList<int> Open(string bookTitle)
+        {
+            if (!File.Exists(_relativePath)) return null;
+            var oldSession = JObject.Parse(File.ReadAllText(_relativePath));
+            return oldSession.ContainsKey(bookTitle) ? oldSession[bookTitle]?.ToObject<List<int>>() : null;
         }
     }
 }

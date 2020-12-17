@@ -49,7 +49,7 @@ namespace GameBook.Wpf.ViewModels
 
         private void OpenLastSession()
         {
-            IList<int> lastSession = _sessionRepository.Open(_readingSession.GetBookTitle(), _sessionFilePath);
+            IList<int> lastSession = _sessionRepository.Open(_readingSession.GetBookTitle());
             if (lastSession == null || lastSession.Count == 0) return;
             _readingSession.OpenLastSession(lastSession);
         }
@@ -74,7 +74,6 @@ namespace GameBook.Wpf.ViewModels
         
         private void DoOpen()
         {
-            
             using (TextReader fileStream = File.OpenText(_chooser.ResourceIdentifier))
             {
 
@@ -83,7 +82,7 @@ namespace GameBook.Wpf.ViewModels
 
         private void DoSaveOnClose()
         {
-            _sessionRepository.Save(_readingSession, _sessionFilePath);
+            _sessionRepository.Save(_readingSession.GetBookTitle(), _readingSession.GetVisitedParagraphs());
         }
 
         private void Refresh()
