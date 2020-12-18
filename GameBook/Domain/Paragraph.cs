@@ -22,10 +22,8 @@ namespace GameBook.Domain
 
         public bool IsTerminal() => Choices.Count == 0;
 
-        public int GetChoiceDestination(in int choiceIndex)
-        {
-            return choiceIndex >= 0 && choiceIndex < Choices.Count ? Choices[choiceIndex].DestParagraph : -1;
-        }
+        public int GetChoiceDestination(in int choiceIndex) 
+            => choiceIndex >= 0 && choiceIndex < Choices.Count ? Choices[choiceIndex].DestParagraph : -1;
 
         public IDictionary<string, int> GetChoices()
         {

@@ -21,7 +21,7 @@ namespace GameBook.io
             return new Book(bookTitle, paragraphList);
         }
 
-        private static void ExtractParagraphs(JArray paragraphs, IList<Paragraph> paragraphList)
+        private static void ExtractParagraphs(JArray paragraphs, ICollection<Paragraph> paragraphList)
         {
             foreach (var paragraph in paragraphs)
             {
@@ -33,7 +33,7 @@ namespace GameBook.io
             }
         }
 
-        private static void ExtractChoices(JArray choices, IList<Choice> choiceList)
+        private static void ExtractChoices(JArray choices, ICollection<Choice> choiceList)
         {
             foreach (var choice in choices)
             {
