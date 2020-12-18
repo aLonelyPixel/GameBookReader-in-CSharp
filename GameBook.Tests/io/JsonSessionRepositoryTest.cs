@@ -18,7 +18,7 @@ namespace GameBook.Tests.io
 
             Assert.AreEqual("../../../resources/importTest.json", jsr.OpenLastSession());
 
-            File.Delete(@"../../../resources/fakeSession.json");
+            File.Delete(@"../../../resources/fakeSessionCreate.json");
         }
 
         [Test]
