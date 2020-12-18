@@ -1,4 +1,5 @@
-﻿using GameBook.Domain;
+﻿using System.IO;
+using GameBook.Domain;
 using GameBook.io;
 using GameBook.Wpf.Views;
 
@@ -11,7 +12,9 @@ namespace GameBook.Wpf.ViewModels
         public GameBookViewModelLocator()
         {
             IReadingSession readingSession = new ReadingSession();
-            IReadingSessionRepository sessionRepository = new JsonSessionRepository();
+            IReadingSessionRepository sessionRepository = 
+                new JsonSessionRepository(Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + 
+                                          $"\\readingSession.json");
             _gameBookViewModel = new GameBookViewModel(readingSession, new FileResourceChooser(), sessionRepository);
         }
 

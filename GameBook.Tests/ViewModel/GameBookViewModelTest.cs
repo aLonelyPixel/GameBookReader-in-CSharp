@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GameBook.Domain;
 using GameBook.io;
 using GameBook.Wpf.ViewModels;
@@ -12,6 +11,7 @@ namespace GameBook.Tests.ViewModel
     [TestFixture]
     public class GameBookViewModelTest
     {
+
         [Test]
         public void CheckBookName()
         {
@@ -28,11 +28,11 @@ namespace GameBook.Tests.ViewModel
             history.Add(1, "p1");
             history.Add(2, "p2");
             rs.Setup(readsess => readsess.GetHistory()).Returns(history);
-            repos.Setup(rep => rep.OpenLastSession()).Returns("");
+            repos.Setup(rep => rep.OpenLastSession()).Returns("../../../resources/importTest.json");
             var gbvm = new GameBookViewModel(rs.Object, fileRes.Object, repos.Object);
 
             Assert.AreEqual("TestBook", gbvm.BookTitle);
-            rs.Verify(readsess => readsess.GetBookTitle(), Times.Once);
+            rs.Verify(readsess => readsess.GetBookTitle(), Times.AtLeastOnce);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace GameBook.Tests.ViewModel
             var gbvm = new GameBookViewModel(rs.Object, fileRes.Object, repos.Object);
 
             gbvm.GoBack.Execute(null);
-            rs.Verify(readsess => readsess.GoBackToPrevious(), Times.Once);
+            rs.Verify(readsess => readsess.GoBackToPrevious(), Times.AtLeastOnce);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace GameBook.Tests.ViewModel
             var gbvm = new GameBookViewModel(rs.Object, fileRes.Object, repos.Object);
 
             gbvm.SaveOnClose.Execute(null);
-            repos.Verify(rep => rep.Save("TestBook", new List<int>(), ""), Times.Once);
+            repos.Verify(rep => rep.Save("TestBook", new List<int>(), ""), Times.AtLeastOnce);
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace GameBook.Tests.ViewModel
             rs.Setup(readsess => readsess.GetHistory()).Returns(new Dictionary<int, string>());
             rs.Setup(readsess => readsess.IsFakeBook()).Returns(true);
             repos.Setup(rep => rep.OpenLastSession()).Returns("");
-            fileRes.SetupGet(fr => fr.ResourceIdentifier).Returns("../../../resources/test.json");
+            fileRes.SetupGet(fr => fr.ResourceIdentifier).Returns("../../../resources/fakeSessionUpdate.json");
             var gbvm = new GameBookViewModel(rs.Object, fileRes.Object, repos.Object);
 
             gbvm.LoadBook.Execute(null);

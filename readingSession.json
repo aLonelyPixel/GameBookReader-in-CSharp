@@ -1,4 +1,8 @@
 {
-  "LastBookPath": "../../../resources/test.json",
-  "testingSave": []
+  "LastBookPath": "C:\\Users\\andre\\Desktop\\myFirstBook.json",
+  "L'histoire d'un homme qui a soif pendant le confinement": [
+    1,
+    2,
+    4
+  ]
 }

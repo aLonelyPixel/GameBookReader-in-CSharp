@@ -17,17 +17,14 @@ namespace GameBook.Wpf.ViewModels
         private readonly IReadingSessionRepository _sessionRepository;
         public ObservableCollection<ChoiceViewModel> Choices { get; }
         public ObservableCollection<VisitedParagraphsViewModel> VisitedParagraphs { get; }
-        public ICommand LoadBook { get; }
-        private ICommand GoToParagraph { get; }
-        public ICommand GoBack { get; }
-        public ICommand SaveOnClose { get; }
-        
+        public ICommand LoadBook { get; set; }
+        private ICommand GoToParagraph { get; set; }
+        public ICommand GoBack { get; set; }
+        public ICommand SaveOnClose { get; set; }
+
         public GameBookViewModel(IReadingSession readingSession, IChooseResource chooser, IReadingSessionRepository sessionRepository)
         {
-            LoadBook = ParameterlessRelayCommand.From((DoOpen));
-            GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
-            GoBack = ParameterlessRelayCommand.From(DoGoBack);
-            SaveOnClose = ParameterlessRelayCommand.From(DoSaveOnClose);
+            InitCommands();
             _readingSession = readingSession;
             _chooser = chooser;
             _sessionRepository = sessionRepository;
@@ -36,6 +33,14 @@ namespace GameBook.Wpf.ViewModels
             OpenLastSession();
             UpdateChoices();
             UpdateVisitedParagraphs();
+        }
+
+        private void InitCommands()
+        {
+            LoadBook = ParameterlessRelayCommand.From((DoOpen));
+            GoToParagraph = ParameterizedRelayCommand<ChoiceViewModel>.From(DoGoToParagraph);
+            GoBack = ParameterlessRelayCommand.From(DoGoBack);
+            SaveOnClose = ParameterlessRelayCommand.From(DoSaveOnClose);
         }
 
         private void OpenLastSession()

@@ -6,7 +6,12 @@ namespace GameBook.io
 {
     public class JsonSessionRepository : IReadingSessionRepository
     {
-        private readonly string _relativePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName + $"\\readingSession.json";
+        private readonly string _relativePath;
+
+        public JsonSessionRepository(string relativePath)
+        {
+            _relativePath = relativePath;
+        }
 
         public void Save(string bookTitle, IList<int> visitedParagraphs, string bookPath)
         {
